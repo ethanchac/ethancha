@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "WebFetch(domain:yap-mu.vercel.app)",
+      "WebFetch(domain:github.com)"
     ],
     "deny": [],
     "ask": []
