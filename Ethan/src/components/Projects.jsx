@@ -1,6 +1,19 @@
 import { Github, Linkedin, Mail, ExternalLink, ChevronDown } from 'lucide-react';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 function Projects() {
+  const sectionRef = useRef(null);
+
+  // Scroll-based animations
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0.8]);
+  const scale = useTransform(scrollYProgress, [0, 0.3], [0.95, 1]);
+  const y = useTransform(scrollYProgress, [0, 0.3], [50, 0]);
   const projects = [
     {
       title: "Yapp",
@@ -87,12 +100,13 @@ function Projects() {
   });
 
   const allGlows = backgroundGlows.flatMap(bg => bg.glows);
-  
+
   return (
-    <section 
-      id="projects" 
+    <motion.section
+      ref={sectionRef}
+      id="projects"
       className="py-20 backdrop-blur-sm relative overflow-hidden bg-gradient-to-br from-gray-900 via-black to-gray-900"
-      style={{backgroundColor: '#121212'}}
+      style={{backgroundColor: '#121212', opacity, scale, y}}
     >
       {/* Dynamic Background Glows */}
       {allGlows.map((glow, index) => (
@@ -253,7 +267,7 @@ function Projects() {
           ))}
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

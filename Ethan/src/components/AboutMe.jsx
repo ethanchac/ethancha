@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import profileImage from '../assets/ethan_pfp.png';
 
 function AboutMe() {
@@ -6,6 +7,16 @@ function AboutMe() {
   const [hoveredMetadata, setHoveredMetadata] = useState(null);
   const sectionRef = useRef(null);
   const dotGridRef = useRef(null);
+
+  // Scroll-based animations for fade-in from About Me section
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "start start"]
+  });
+
+  const aboutOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
+  const aboutScale = useTransform(scrollYProgress, [0, 0.5], [0.95, 1]);
+  const aboutY = useTransform(scrollYProgress, [0, 0.5], [50, 0]);
 
   // Intersection Observer for fade-in animation with higher threshold
   useEffect(() => {
@@ -76,7 +87,10 @@ function AboutMe() {
         />
       </div>
 
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 relative z-10">
+      <motion.div
+        className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 relative z-10"
+        style={{ opacity: aboutOpacity, scale: aboutScale, y: aboutY }}
+      >
         {/* Left Side - System Log (60%) */}
         <div
           className={`lg:col-span-3 space-y-8 ${
@@ -245,7 +259,7 @@ function AboutMe() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

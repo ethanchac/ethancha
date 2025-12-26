@@ -341,3 +341,17 @@
   background: rgba(25, 25, 25, 0.8);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/* Scroll Container */
+.scroll-container {
+  background: linear-gradient(135deg, rgb(17, 24, 39) 0%, rgb(0, 0, 0) 50%, rgb(31, 41, 55) 100%);
+}
+
+.snap-section {
+  min-height: 100vh;
+  position: relative;
+}
+
+.no-snap {
+  position: relative;
+}

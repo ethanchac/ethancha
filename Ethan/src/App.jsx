@@ -1,6 +1,5 @@
 import Hero from "./components/Hero";
 import AboutMe from "./components/AboutMe";
-import About from "./components/About";
 import Experience from "./components/Experience";
 import Projects from "./components/Projects";
 import Contact from "./components/Contact";
@@ -10,22 +9,25 @@ import TabNavigation from "./components/TabNavigation";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
-      <div id="hero">
+    <div className="scroll-container">
+      <div id="hero" className="snap-section">
         <Hero />
       </div>
-      <div id="about">
+      <div id="about" className="snap-section">
         <AboutMe />
       </div>
-      <About />
-      <Experience />
-      <div id="projects">
+      <div className="no-snap">
+        <Experience />
+      </div>
+      <div id="projects" className="no-snap">
         <Projects />
       </div>
-      <div id="contact">
+      <div id="contact" className="no-snap">
         <Contact />
       </div>
-      <Footer />
+      <div className="no-snap">
+        <Footer />
+      </div>
       <TabNavigation />
     </div>
   );

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Linkedin } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import CodeWindow from './CodeWindow';
 
 function Hero() {
@@ -14,8 +15,19 @@ function Hero() {
   const [editableName, setEditableName] = useState('Ethan Cha');
   const [editableTagline, setEditableTagline] = useState('I just like building things that work.');
   const dotsRef = useRef(null);
+  const sectionRef = useRef(null);
 
   const introText = "Hello world, I'm";
+
+  // Scroll-based animations
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"]
+  });
+
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -153,6 +165,7 @@ function Hero() {
 
   return (
     <section
+      ref={sectionRef}
       className="min-h-screen flex items-center px-8 md:px-16 lg:px-24 relative overflow-hidden"
       style={{ backgroundColor: 'rgb(28, 28, 28)' }}
     >
@@ -162,7 +175,10 @@ function Hero() {
       </div>
 
       {/* Left side - Main text */}
-      <div className="max-w-5xl relative z-10 w-full lg:w-1/2">
+      <motion.div
+        className="max-w-5xl relative z-10 w-full lg:w-1/2"
+        style={{ opacity, y }}
+      >
         <p
           className="text-lg md:text-xl mb-4 font-mono"
           style={{ color: 'rgb(240, 240, 240)' }}
@@ -209,10 +225,13 @@ function Hero() {
             contact_me.sh
           </a>
         </div>
-      </div>
+      </motion.div>
 
       {/* Right side - Code Window */}
-      <div className="hidden lg:block absolute right-8 top-1/2 -translate-y-1/2 w-[500px] xl:w-[600px]">
+      <motion.div
+        className="hidden lg:block absolute right-8 top-1/2 -translate-y-1/2 w-[500px] xl:w-[600px]"
+        style={{ opacity, scale }}
+      >
         <CodeWindow
           phase={phase}
           displayIntro={displayIntro}
@@ -225,7 +244,7 @@ function Hero() {
           onNameChange={setEditableName}
           onTaglineChange={setEditableTagline}
         />
-      </div>
+      </motion.div>
     </section>
   );
 };

@@ -1,8 +1,27 @@
 import { Github, Linkedin, Mail, ExternalLink, ChevronDown } from 'lucide-react';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 function Contact() {
+  const sectionRef = useRef(null);
+
+  // Scroll-based animations
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0.8]);
+  const scale = useTransform(scrollYProgress, [0, 0.3], [0.95, 1]);
+  const y = useTransform(scrollYProgress, [0, 0.3], [50, 0]);
+
   return (
-    <section id="contact" className="py-20 bg-gray-800/50 backdrop-blur-sm relative">
+    <motion.section
+      ref={sectionRef}
+      id="contact"
+      className="py-20 bg-gray-800/50 backdrop-blur-sm relative"
+      style={{ opacity, scale, y }}
+    >
       <div className="absolute inset-0 bg-gradient-to-r from-green-900/10 to-blue-900/10"></div>
       <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
         <div className="mb-16">
@@ -47,7 +66,7 @@ function Contact() {
           Let's Work Together
         </a>
       </div>
-    </section>
+    </motion.section>
   );
 };
 
