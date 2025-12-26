@@ -120,14 +120,14 @@ function AboutMe() {
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen relative overflow-hidden flex items-center px-4 sm:px-8 md:px-16 lg:px-24 py-12 sm:py-16 md:py-20"
+      className="min-h-screen relative overflow-hidden flex items-center px-8 md:px-16 lg:px-24 py-12 sm:py-16 md:py-20"
       style={{ backgroundColor: 'rgb(28, 28, 28)' }}
     >
       {/* Faint dot grid background */}
       <DotBackground />
 
       <motion.div
-        className="max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 relative z-10"
+        className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 relative z-10"
         style={{ opacity: aboutOpacity, scale: aboutScale, y: aboutY }}
       >
         {/* Left Side - System Log (60%) */}

@@ -263,13 +263,13 @@ function Projects() {
     <section
       ref={sectionRef}
       id="projects"
-      className="min-h-screen relative overflow-hidden flex items-center px-4 sm:px-8 md:px-16 lg:px-24 py-12 sm:py-16 md:py-20"
+      className="min-h-screen relative overflow-hidden flex items-center px-8 md:px-16 lg:px-24 py-12 sm:py-16 md:py-20"
       style={{ backgroundColor: 'rgb(28, 28, 28)' }}
     >
       {/* Faint dot grid background */}
       <DotBackground />
 
-      <div className="max-w-7xl w-full mx-auto relative z-10">
+      <div className="max-w-6xl w-full relative z-10">
         {/* Header */}
         <div className={`mb-12 md:mb-16 ${isVisible ? 'animate-slide-up-expo' : 'opacity-0'}`}>
           <p className="text-xs sm:text-sm font-mono text-gray-500 mb-2">&gt; git log --projects</p>
