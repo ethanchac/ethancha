@@ -1,12 +1,25 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import profileImage from '../assets/ethan_pfp.png';
+import DotBackground from './DotBackground';
 
 function AboutMe() {
   const [isVisible, setIsVisible] = useState(false);
+  const [isInView, setIsInView] = useState(false);
   const [hoveredMetadata, setHoveredMetadata] = useState(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [skillsExpanded, setSkillsExpanded] = useState(false);
   const sectionRef = useRef(null);
   const dotGridRef = useRef(null);
+
+  // Update time every minute
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000); // Update every minute
+
+    return () => clearInterval(timer);
+  }, []);
 
   // Scroll-based animations for fade-in from About Me section
   const { scrollYProgress } = useScroll({
@@ -27,6 +40,26 @@ function AboutMe() {
         }
       },
       { threshold: 0.4 } // Trigger later for snappier feel
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
+  // Track when section is actively in view for purple glow sync
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting && entry.intersectionRatio > 0.5);
+      },
+      { threshold: [0, 0.5, 1] }
     );
 
     if (sectionRef.current) {
@@ -61,11 +94,27 @@ function AboutMe() {
 
   const bioData = {
     location: "Toronto, ON",
-    focus: "Full-Stack & Creative Tech",
+    focus: "Full-Stack Architectures & AI Systems",
     philosophy: "Simple > Complex",
-    skills: ["React", "Node.js", "TypeScript", "Tailwind"],
-    interests: ["Open Source", "UI/UX", "Performance"],
-    availability: "Open to opportunities"
+    topSkills: ["React", "Node.js", "Python", "Flask", "AWS", "Supabase"],
+    skillCategories: {
+      Languages: ["Java", "Python", "C", "JavaScript", "HTML/CSS", "SQL", "ASM", "Swift", "Lisp"],
+      "Libraries/Frameworks": ["React", "React Native", "Node JS", "Express JS", "Next JS", "Flask", "Swing", "Tailwind CSS", "SwiftUI"],
+      "Development Tools": ["Git", "VS Code", "MongoDB", "Firebase", "PostgreSQL", "AWS", "Supabase", "S3", "Railway"]
+    },
+    interests: ["Software Engineering", "Machine Learning", "Cloud Scaling"],
+    availability: "Open to opportunities",
+    currentlyBuilding: "Scalable social media platform"
+  };
+
+  // Format current time
+  const formatTime = () => {
+    return currentTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+      timeZone: 'America/Toronto'
+    }) + ' (EST)';
   };
 
   return (
@@ -74,18 +123,8 @@ function AboutMe() {
       className="min-h-screen relative overflow-hidden flex items-center px-8 md:px-16 lg:px-24 py-20"
       style={{ backgroundColor: 'rgb(28, 28, 28)' }}
     >
-      {/* Parallax Dot Grid Background */}
-      <div ref={dotGridRef} className="absolute inset-0 opacity-20 pointer-events-none">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              radial-gradient(circle, rgba(255, 255, 255, 0.15) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px',
-          }}
-        />
-      </div>
+      {/* Faint dot grid background */}
+      <DotBackground />
 
       <motion.div
         className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 relative z-10"
@@ -111,33 +150,116 @@ function AboutMe() {
           {/* System Log */}
           <div className="space-y-4 font-mono text-sm md:text-base">
             <div className="flex transition-all duration-300">
-              <span className="text-purple-400 min-w-[140px]">[Location]:</span>
+              <span className={`min-w-[140px] transition-all duration-500 ${
+                isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
+              }`}>[Location]:</span>
               <span className="text-gray-300">{bioData.location}</span>
             </div>
 
             <div className="flex transition-all duration-300">
-              <span className="text-purple-400 min-w-[140px]">[Focus]:</span>
+              <span className={`min-w-[140px] transition-all duration-500 ${
+                isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
+              }`}>[Focus]:</span>
               <span className="text-gray-300">{bioData.focus}</span>
             </div>
 
             <div className="flex transition-all duration-300">
-              <span className="text-purple-400 min-w-[140px]">[Philosophy]:</span>
+              <span className={`min-w-[140px] transition-all duration-500 ${
+                isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
+              }`}>[Philosophy]:</span>
               <span className="text-gray-300">{bioData.philosophy}</span>
             </div>
 
-            <div className="flex transition-all duration-300">
-              <span className="text-purple-400 min-w-[140px]">[Skills]:</span>
-              <span className="text-gray-300">{bioData.skills.join(', ')}</span>
+            <div className="transition-all duration-300 relative">
+              <div className="flex items-start">
+                <span className={`min-w-[140px] transition-all duration-500 ${
+                  isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
+                }`}>[Skills]:</span>
+                <div className="flex-1">
+                  <span className="text-gray-300">{bioData.topSkills.join(', ')}</span>
+                  <span
+                    onMouseEnter={() => setSkillsExpanded(true)}
+                    onMouseLeave={() => setSkillsExpanded(false)}
+                    className="ml-2 text-purple-400 hover:text-purple-300 transition-colors duration-200 hover:drop-shadow-[0_0_6px_rgba(168,85,247,0.8)] cursor-pointer"
+                  >
+                    [+ more]
+                  </span>
+                </div>
+              </div>
+
+              {/* VSCode Terminal-Style Overlay */}
+              {skillsExpanded && (
+                <div
+                  className="absolute left-0 top-full mt-2 z-50 animate-fade-in"
+                  onMouseEnter={() => setSkillsExpanded(true)}
+                  onMouseLeave={() => setSkillsExpanded(false)}
+                >
+                  {/* Terminal Window */}
+                  <div className="bg-[#1e1e1e] border border-[#3c3c3c] rounded-md shadow-2xl overflow-hidden min-w-[500px]">
+                    {/* Terminal Header */}
+                    <div className="bg-[#2d2d30] px-3 py-1.5 flex items-center justify-between border-b border-[#3c3c3c]">
+                      <div className="flex items-center gap-2">
+                        <div className="text-[#cccccc] text-xs font-mono">TERMINAL</div>
+                        <div className="text-[#666666] text-xs">×</div>
+                      </div>
+                      <div className="flex gap-1">
+                        <div className="text-[#666666] text-xs">⌃</div>
+                      </div>
+                    </div>
+
+                    {/* Terminal Content */}
+                    <div className="p-4 font-mono text-sm space-y-1">
+                      <div className="text-[#4ec9b0]">$ cat skills.txt</div>
+                      <div className="mt-2 space-y-2">
+                        {Object.entries(bioData.skillCategories).map(([category, skills]) => (
+                          <div key={category}>
+                            <div className="text-[#569cd6]">
+                              <span className="text-[#dcdcaa]">{category}</span>
+                              <span className="text-[#d4d4d4]">:</span>
+                            </div>
+                            <div className="text-[#ce9178] ml-4">
+                              {skills.map((skill, index) => (
+                                <span key={skill}>
+                                  {skill}
+                                  {index < skills.length - 1 && <span className="text-[#d4d4d4]">, </span>}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="text-[#4ec9b0] mt-2">$ <span className="animate-pulse">_</span></div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="flex transition-all duration-300">
-              <span className="text-purple-400 min-w-[140px]">[Interests]:</span>
+              <span className={`min-w-[140px] transition-all duration-500 ${
+                isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
+              }`}>[Interests]:</span>
               <span className="text-gray-300">{bioData.interests.join(', ')}</span>
             </div>
 
             <div className="flex transition-all duration-300">
-              <span className="text-purple-400 min-w-[140px]">[Availability]:</span>
+              <span className={`min-w-[140px] transition-all duration-500 ${
+                isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
+              }`}>[Availability]:</span>
               <span className="text-gray-300">{bioData.availability}</span>
+            </div>
+
+            {/* Live Data Section */}
+            <div className="h-px w-full bg-purple-500/20 my-2"></div>
+
+            <div className="flex transition-all duration-300">
+              <span className="text-green-400 min-w-[140px] animate-pulse">[Local_Time]:</span>
+              <span className="text-gray-300">{formatTime()}</span>
+            </div>
+
+            <div className="flex transition-all duration-300">
+              <span className="text-green-400 min-w-[140px] animate-pulse">[Currently_Building]:</span>
+              <span className="text-gray-300">{bioData.currentlyBuilding}</span>
             </div>
           </div>
 
@@ -151,23 +273,6 @@ function AboutMe() {
               sleek interface or a robust backend, I believe the best solutions are the ones
               that feel invisible—they just work.
             </p>
-          </div>
-
-          {/* Call to Action */}
-          <div className={`mt-8 ${
-            isVisible ? 'animate-slide-up-expo-delay-1' : 'opacity-0 translate-y-20'
-          }`}>
-            <a
-              href="#projects"
-              className="inline-flex items-center gap-2 font-mono text-sm text-purple-400 hover:text-purple-300 transition-colors group"
-            >
-              <span className="text-gray-500">&gt;</span>
-              <span className="relative">
-                view_projects.sh
-                <span className="absolute bottom-0 left-0 w-0 h-px bg-purple-400 transition-all duration-300 group-hover:w-full"></span>
-              </span>
-              <span className="transform transition-transform group-hover:translate-x-1">→</span>
-            </a>
           </div>
         </div>
 
@@ -190,8 +295,12 @@ function AboutMe() {
             <div className="code-content p-6">
               {/* Profile Image Container with Glow */}
               <div className="relative group">
-                {/* Purple/Blue Backlight Glow */}
-                <div className="absolute inset-0 blur-2xl opacity-60 group-hover:opacity-80 transition-opacity duration-500">
+                {/* Purple/Blue Backlight Glow - Synced with navigation */}
+                <div className={`absolute inset-0 blur-2xl transition-all duration-500 ${
+                  isInView
+                    ? 'opacity-80 animate-pulse'
+                    : 'opacity-60 group-hover:opacity-80'
+                }`}>
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500 via-blue-500 to-violet-600 rounded-2xl"></div>
                 </div>
 

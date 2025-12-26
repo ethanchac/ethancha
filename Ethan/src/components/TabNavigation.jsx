@@ -6,6 +6,7 @@ function TabNavigation() {
   const tabs = [
     { id: 'hero', label: 'home.sh', section: '#hero' },
     { id: 'about', label: 'about_me.sh', section: '#about' },
+    { id: 'experience', label: 'experience.sh', section: '#experience' },
     { id: 'projects', label: 'projects.sh', section: '#projects' },
     { id: 'contact', label: 'contact.sh', section: '#contact' },
   ];

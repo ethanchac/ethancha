@@ -1,9 +1,11 @@
 import { Github, Linkedin, Mail, ExternalLink, ChevronDown } from 'lucide-react';
+import DotBackground from './DotBackground';
 
 function Footer() {
   return (
-    <footer className="bg-gray-900 text-white py-16 relative">
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+    <footer className="text-white py-16 relative overflow-hidden" style={{ backgroundColor: 'rgb(28, 28, 28)' }}>
+      {/* Faint dot grid background */}
+      <DotBackground />
       <div className="max-w-6xl mx-auto px-6 text-center relative z-10">
         <div className="mb-10">
           <h3 className="text-3xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Ethan Chan</h3>

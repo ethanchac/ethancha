@@ -1,21 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import DotBackground from './DotBackground';
 
 function Experience() {
   const [isVisible, setIsVisible] = useState(false);
-  const [lineHeight, setLineHeight] = useState(0);
   const sectionRef = useRef(null);
-  const timelineRef = useRef(null);
-
-  // Scroll-based animations
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"]
-  });
-
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0.8]);
-  const scale = useTransform(scrollYProgress, [0, 0.3], [0.95, 1]);
-  const y = useTransform(scrollYProgress, [0, 0.3], [50, 0]);
 
   const experiences = [
     {
@@ -68,46 +56,16 @@ function Experience() {
     };
   }, []);
 
-  // Timeline line drawing animation on scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!timelineRef.current || !sectionRef.current) return;
-
-      const sectionTop = sectionRef.current.getBoundingClientRect().top;
-      const sectionHeight = sectionRef.current.offsetHeight;
-      const viewportHeight = window.innerHeight;
-
-      // Calculate how much of the section is visible
-      const scrollProgress = Math.max(0, Math.min(1,
-        (viewportHeight - sectionTop) / (sectionHeight + viewportHeight)
-      ));
-
-      setLineHeight(scrollProgress * 100);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial call
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isVisible]);
-
   return (
-    <motion.section
+    <section
       ref={sectionRef}
       className="min-h-screen relative overflow-hidden flex items-center px-8 md:px-16 lg:px-24 py-20"
-      style={{ backgroundColor: 'rgb(28, 28, 28)', opacity, scale, y }}
+      style={{ backgroundColor: 'rgb(28, 28, 28)' }}
     >
-      {/* Dot Grid Background */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `radial-gradient(circle, rgba(255, 255, 255, 0.15) 1px, transparent 1px)`,
-            backgroundSize: '50px 50px',
-          }}
-        />
-      </div>
+      {/* Faint dot grid background */}
+      <DotBackground />
 
-      <div className="max-w-5xl mx-auto w-full relative z-10">
+      <div className="max-w-6xl mx-auto w-full relative z-10">
         {/* Header */}
         <div className={`mb-16 ${isVisible ? 'animate-slide-up-expo' : 'opacity-0'}`}>
           <p className="text-sm font-mono text-gray-500 mb-2">&gt; git log --experience</p>
@@ -116,19 +74,6 @@ function Experience() {
 
         {/* Timeline */}
         <div className="relative">
-          {/* Vertical Line - Background (full height) */}
-          <div
-            className="absolute left-32 top-0 w-[2px] bg-gray-800"
-            style={{ height: '100%' }}
-          />
-
-          {/* Vertical Line - Animated (draws on scroll) */}
-          <div
-            ref={timelineRef}
-            className="absolute left-32 top-0 w-[2px] bg-gray-700 transition-all duration-300 ease-out"
-            style={{ height: `${lineHeight}%` }}
-          />
-
           {/* Experience Entries */}
           <div className="space-y-16">
             {experiences.map((exp, index) => (
@@ -146,36 +91,43 @@ function Experience() {
                   <span className="font-mono text-xs text-gray-500">{exp.date}</span>
                 </div>
 
-                {/* Commit Node */}
-                <div className="absolute left-[124px] top-1 w-3 h-3 rounded-full bg-gray-700 border-2 border-gray-800 transition-all duration-300 group-hover:bg-purple-500 group-hover:border-purple-400 group-hover:shadow-[0_0_12px_rgba(168,85,247,0.5)]" />
+                {/* Commit Node - Active/Current job gets pulse animation */}
+                <div
+                  data-timeline-dot
+                  className={`absolute left-[124px] top-1 w-3 h-3 rounded-full transition-all duration-300 z-10 ${
+                    index === 0
+                      ? 'bg-white border-2 border-white animate-node-pulse'
+                      : 'bg-gray-700 border-2 border-gray-800 group-hover:bg-purple-500 group-hover:border-purple-400 group-hover:shadow-[0_0_12px_rgba(168,85,247,0.5)]'
+                  }`}
+                />
 
                 {/* Content (Right of Timeline) */}
                 <div className="ml-40">
                   <div className="space-y-3">
                     {/* Title */}
                     <div>
-                      <h3 className="text-xl font-mono text-white font-semibold group-hover:text-purple-300 transition-colors">
+                      <h3 className="text-xl font-mono font-semibold group-hover:text-purple-300 transition-colors" style={{ color: '#FFFFFF' }}>
                         {exp.position}
                       </h3>
-                      <p className="font-mono text-sm text-purple-400">
+                      <p className="font-mono text-sm" style={{ color: '#A1A1AA' }}>
                         {exp.company} · {exp.location}
                       </p>
-                      <p className="font-mono text-xs text-gray-500 mt-1">{exp.period}</p>
+                      <p className="font-mono text-xs mt-1" style={{ color: '#A1A1AA' }}>{exp.period}</p>
                     </div>
 
                     {/* Highlights */}
-                    <ul className="space-y-2 text-sm font-mono text-gray-400 leading-relaxed">
+                    <ul className="space-y-2 text-sm font-mono leading-relaxed" style={{ color: '#71717A' }}>
                       {exp.highlights.map((highlight, idx) => (
                         <li key={idx} className="flex gap-2">
-                          <span className="text-gray-600 mt-1">•</span>
+                          <span className="mt-1" style={{ color: '#52525B' }}>•</span>
                           <span className="group-hover:text-gray-300 transition-colors">{highlight}</span>
                         </li>
                       ))}
                     </ul>
 
                     {/* Technologies - Code Comment Style */}
-                    <div className="font-mono text-xs text-gray-600 pt-2">
-                      <span className="text-gray-700">// Stack: </span>
+                    <div className="font-mono text-xs pt-2" style={{ color: '#52525B' }}>
+                      <span>// Stack: </span>
                       {exp.technologies.join(', ')}
                     </div>
                   </div>
@@ -185,7 +137,7 @@ function Experience() {
           </div>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 }
 

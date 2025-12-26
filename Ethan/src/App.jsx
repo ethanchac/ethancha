@@ -5,6 +5,7 @@ import Projects from "./components/Projects";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import TabNavigation from "./components/TabNavigation";
+import GlobalTimeline from "./components/GlobalTimeline";
 
 
 function App() {
@@ -13,22 +14,23 @@ function App() {
       <div id="hero" className="snap-section">
         <Hero />
       </div>
-      <div id="about" className="snap-section">
+      <div id="about" className="no-snap">
         <AboutMe />
       </div>
-      <div className="no-snap">
+      <div id="experience" className="no-snap">
         <Experience />
       </div>
-      <div id="projects" className="no-snap">
+      <div id="projects" className="snap-section-strong">
         <Projects />
       </div>
-      <div id="contact" className="no-snap">
+      <div id="contact" className="snap-section">
         <Contact />
       </div>
-      <div className="no-snap">
+      <div className="snap-section">
         <Footer />
       </div>
       <TabNavigation />
+      <GlobalTimeline />
     </div>
   );
 };

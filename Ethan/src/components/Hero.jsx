@@ -9,7 +9,6 @@ function Hero() {
   const [phase, setPhase] = useState('intro');
   const [showCursor, setShowCursor] = useState(true);
   const [pulseActive, setPulseActive] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isTyping, setIsTyping] = useState(true);
   const [editableIntro, setEditableIntro] = useState("Hello world, I'm");
   const [editableName, setEditableName] = useState('Ethan Cha');
@@ -28,21 +27,6 @@ function Hero() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
   const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
-
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      if (dotsRef.current) {
-        const rect = dotsRef.current.getBoundingClientRect();
-        setMousePos({
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top,
-        });
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   useEffect(() => {
     let timeout;

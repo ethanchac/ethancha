@@ -1,6 +1,7 @@
 import { Github, Linkedin, Mail, ExternalLink, ChevronDown } from 'lucide-react';
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import DotBackground from './DotBackground';
 
 function Contact() {
   const sectionRef = useRef(null);
@@ -19,10 +20,11 @@ function Contact() {
     <motion.section
       ref={sectionRef}
       id="contact"
-      className="py-20 bg-gray-800/50 backdrop-blur-sm relative"
-      style={{ opacity, scale, y }}
+      className="py-20 relative overflow-hidden"
+      style={{ opacity, scale, y, backgroundColor: 'rgb(28, 28, 28)' }}
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-green-900/10 to-blue-900/10"></div>
+      {/* Faint dot grid background */}
+      <DotBackground />
       <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
         <div className="mb-16">
           <h2 className="text-5xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent mb-6">Get In Touch</h2>
