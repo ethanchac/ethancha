@@ -4,7 +4,8 @@
       "Bash(npm run dev:*)",
       "WebFetch(domain:yap-mu.vercel.app)",
       "WebFetch(domain:github.com)",
-      "Bash(npm install framer-motion)"
+      "Bash(npm install framer-motion)",
+      "Bash(npm install react-icons)"
     ],
     "deny": [],
     "ask": []

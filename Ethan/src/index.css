@@ -392,3 +392,26 @@ body {
   position: relative;
   scroll-snap-align: none;
 }
+
+/* Remove any borders/boxes from experience and projects sections */
+#experience ul,
+#experience ul li,
+#experience ul li *,
+#experience ul::before,
+#experience ul::after,
+#experience ul li::before,
+#experience ul li::after,
+#projects ul,
+#projects ul li,
+#projects ul li *,
+#projects ul::before,
+#projects ul::after,
+#projects ul li::before,
+#projects ul li::after {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  list-style: none !important;
+  padding-left: 0 !important;
+}

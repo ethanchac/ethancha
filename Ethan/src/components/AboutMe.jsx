@@ -93,7 +93,7 @@ function AboutMe() {
   }, []);
 
   const bioData = {
-    location: "Toronto, ON",
+    location: "Markham, ON",
     focus: "Full-Stack Architectures & AI Systems",
     philosophy: "Simple > Complex",
     topSkills: ["React", "Node.js", "Python", "Flask", "AWS", "Supabase"],
@@ -269,9 +269,7 @@ function AboutMe() {
           }`}>
             <div className="h-px w-16 bg-purple-500/50"></div>
             <p className="text-base md:text-lg font-mono text-gray-300 leading-relaxed max-w-2xl">
-              I build web experiences that prioritize clarity and performance. Whether it's a
-              sleek interface or a robust backend, I believe the best solutions are the ones
-              that feel invisible—they just work.
+              I build web experiences where everything feels right. I realized the best technology is invisible and it quietly does its thing so people can focus on what actually matters. No drama, no crashes, just smooth sailing.
             </p>
           </div>
         </div>

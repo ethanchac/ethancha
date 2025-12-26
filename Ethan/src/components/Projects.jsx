@@ -1,10 +1,76 @@
 import { useEffect, useRef, useState } from 'react';
-import { Github, ExternalLink } from 'lucide-react';
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { Github, ExternalLink, Cloud } from 'lucide-react';
+import { SiReact, SiFlask, SiMongodb, SiSocketdotio, SiTailwindcss, SiSupabase, SiThreedotjs, SiGooglegemini } from 'react-icons/si';
+import { Database, Map, Mail, Server, Mic } from 'lucide-react';
 import DotBackground from './DotBackground';
 
 function Projects() {
   const [isVisible, setIsVisible] = useState(false);
+  const [expandedProject, setExpandedProject] = useState(null);
+  const [timelineMetrics, setTimelineMetrics] = useState({
+    startY: 0,
+    height: 0,
+    leftX: 0
+  });
   const sectionRef = useRef(null);
+  const timelineRef = useRef(null);
+
+  // Track scroll progress with framer-motion
+  const { scrollYProgress } = useScroll();
+
+  // Apply spring physics for smooth animation
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 50,
+    damping: 20,
+    restDelta: 0.001
+  });
+
+  // Map scroll progress to percentage
+  const progressPercentage = useTransform(
+    smoothProgress,
+    (latest) => {
+      if (timelineMetrics.height === 0) return 0;
+
+      const scrollY = latest * document.documentElement.scrollHeight;
+      const viewportHeight = window.innerHeight;
+
+      // Start drawing when projects section comes into view
+      const startScroll = timelineMetrics.startY - viewportHeight * 0.5;
+      const endScroll = timelineMetrics.startY + timelineMetrics.height;
+      const scrollRange = endScroll - startScroll;
+
+      const progress = Math.max(0, Math.min(1,
+        (scrollY - startScroll) / scrollRange
+      ));
+
+      return progress * 100;
+    }
+  );
+
+  // Convert percentage to string for CSS
+  const progressHeight = useTransform(progressPercentage, (v) => `${v}%`);
+
+  // Tech icon mapping
+  const getTechIcon = (tech) => {
+    const iconMap = {
+      'React': <SiReact className="w-4 h-4" />,
+      'React Native': <SiReact className="w-4 h-4" />,
+      'Flask': <SiFlask className="w-4 h-4" />,
+      'MongoDB': <SiMongodb className="w-4 h-4" />,
+      'Socket.IO': <SiSocketdotio className="w-4 h-4" />,
+      'AWS S3': <Cloud className="w-4 h-4" />,
+      'TailwindCSS': <SiTailwindcss className="w-4 h-4" />,
+      'Supabase': <SiSupabase className="w-4 h-4" />,
+      'Three.js': <SiThreedotjs className="w-4 h-4" />,
+      'Gemini AI': <SiGooglegemini className="w-4 h-4" />,
+      'ElevenLabs API': <Mic className="w-4 h-4" />,
+      'Leaflet': <Map className="w-4 h-4" />,
+      'Sendgrid API': <Mail className="w-4 h-4" />,
+      'Railway': <Server className="w-4 h-4" />,
+    };
+    return iconMap[tech] || null;
+  };
 
   const projects = [
     {
@@ -12,12 +78,18 @@ function Projects() {
       version: "v2.1",
       date: "2024",
       shortDate: "2024",
-      description: "A full-stack TMU-exclusive social platform fostering campus community engagement with event hosting, community tabs, interactive maps, and real-time messaging, bringing 100+ daily users.",
+      tagline: "Building a social home for TMU students. 100+ daily users.",
+      metadata: {
+        status: "Production / Live",
+        engine: "Flask + React",
+        impact: "180+ endpoints, 100+ users"
+      },
       features: [
         "Architected RESTful API backend using Flask with modular blueprint design, implementing 180+ endpoints across 16 microservice modules with MongoDB database integration",
         "Integrated AWS S3 cloud storage with boto3 SDK for scalable file management, implementing secure image uploads, CDN optimization, and automated cleanup processes",
         "Built interactive campus features including Leaflet maps with user-created waypoints, event hosting/joining system, and community engagement tools"
       ],
+      mainTech: ["React", "React Native", "Flask", "MongoDB", "Socket.IO", "AWS S3"],
       technologies: ["React", "React Native", "Flask", "MongoDB", "Socket.IO", "AWS S3", "Leaflet", "Sendgrid API", "Railway", "TailwindCSS"],
       github: "https://github.com/ethanchac/Yap",
       live: "https://yap-mu.vercel.app",
@@ -28,12 +100,18 @@ function Projects() {
       version: "v1.5",
       date: "2024",
       shortDate: "2024",
-      description: "A real-time 3D medical AI assistant that functions as a personal doctor, holding natural voice conversations, tracking symptoms, and remembering key health notes.",
+      tagline: "Your AI doctor. Real-time 3D assistant with voice.",
+      metadata: {
+        status: "Production / Live",
+        engine: "React + Gemini AI",
+        impact: "90% accuracy, 500+ conversations"
+      },
       features: [
         "Engineered comprehensive medical prompts with multi-turn context management and safety guardrails, achieving 90% accuracy in symptom assessment across 500+ test conversations",
         "Integrated Google Gemini AI for intelligent diagnosis suggestions and ElevenLabs API for natural voice synthesis responses",
         "Implemented secure authentication and real-time data persistence using Supabase, storing user-specific health data, conversation logs, and AI-generated summaries with automatic session continuity"
       ],
+      mainTech: ["React", "TailwindCSS", "Three.js", "Gemini AI", "ElevenLabs API", "Supabase"],
       technologies: ["React", "TailwindCSS", "Supabase", "Three.js", "Gemini API", "ElevenLabs API", "Google Cloud API"],
       github: "https://github.com/ethanchac/MedPal",
       live: "https://med-pal-one.vercel.app/",
@@ -63,6 +141,59 @@ function Projects() {
     };
   }, []);
 
+  // Calculate timeline dimensions by finding actual dot positions
+  useEffect(() => {
+    const calculateMetrics = () => {
+      // Find all timeline dots in the projects section
+      const projectsSection = sectionRef.current;
+      if (!projectsSection) return;
+
+      const dots = projectsSection.querySelectorAll('[data-timeline-dot]');
+      const endMarker = projectsSection.querySelector('[data-timeline-end]');
+
+      if (dots.length === 0) return;
+
+      // Get first dot and last element (either last dot or end marker)
+      const firstDot = dots[0];
+      const lastElement = endMarker || dots[dots.length - 1];
+
+      // Get their bounding rectangles
+      const firstRect = firstDot.getBoundingClientRect();
+      const lastRect = lastElement.getBoundingClientRect();
+
+      // Calculate absolute positions
+      const scrollY = window.scrollY || window.pageYOffset;
+
+      // Dot center positions (dots are w-3 h-3 = 12px, so center is at +6px)
+      const startY = firstRect.top + scrollY + 6;
+      const leftX = firstRect.left + 6; // Center of the dot horizontally
+
+      // Height from first dot to last element
+      const endY = lastRect.top + scrollY + 6;
+      const height = endY - startY;
+
+      setTimelineMetrics({
+        startY,
+        height,
+        leftX
+      });
+    };
+
+    // Calculate on mount and when window resizes
+    calculateMetrics();
+    window.addEventListener('resize', calculateMetrics);
+
+    // Recalculate after animations settle
+    const timer = setTimeout(calculateMetrics, 500);
+    const timer2 = setTimeout(calculateMetrics, 1000);
+
+    return () => {
+      window.removeEventListener('resize', calculateMetrics);
+      clearTimeout(timer);
+      clearTimeout(timer2);
+    };
+  }, [isVisible]);
+
   return (
     <section
       ref={sectionRef}
@@ -81,7 +212,17 @@ function Projects() {
         </div>
 
         {/* Timeline */}
-        <div className="relative">
+        <div className="relative" ref={timelineRef}>
+          {/* Simple timeline - relative positioning, starts at first dot (top-1) */}
+          <div className="absolute left-[130px] top-1 bottom-8 w-px bg-gray-800 z-0"></div>
+          <motion.div
+            className="absolute left-[130px] top-1 w-px bg-white z-0"
+            style={{
+              height: progressHeight,
+              boxShadow: '0 0 8px rgba(255, 255, 255, 0.5)'
+            }}
+          />
+
           {/* Project Entries */}
           <div className="space-y-24">
             {projects.map((project, index) => (
@@ -94,11 +235,6 @@ function Projects() {
                   animationDelay: `${index * 0.2}s`,
                 }}
               >
-                {/* Date (Left of Timeline) */}
-                <div className="absolute left-0 top-0 w-24 text-right">
-                  <span className="font-mono text-xs text-gray-500">{project.shortDate}</span>
-                </div>
-
                 {/* Commit Node */}
                 <div
                   data-timeline-dot
@@ -114,39 +250,73 @@ function Projects() {
                   <div className="grid lg:grid-cols-2 gap-8">
                     {/* Left Side - Project Details */}
                     <div className="space-y-4">
-                      {/* Title & Version */}
+                      {/* Title */}
                       <div>
-                        <div className="flex items-baseline gap-3 mb-2">
-                          <h3 className="text-2xl font-mono font-semibold" style={{ color: '#FFFFFF' }}>
-                            {project.title}
-                          </h3>
-                          <span className="font-mono text-xs px-2 py-1 bg-white/10 border border-white/20 rounded" style={{ color: '#A1A1AA' }}>
-                            {project.version}
-                          </span>
-                        </div>
-                        <p className="font-mono text-sm" style={{ color: '#A1A1AA' }}>
-                          {project.description}
+                        <h3 className="text-2xl font-mono font-semibold mb-3" style={{ color: '#FFFFFF' }}>
+                          {project.title}
+                        </h3>
+                        <p className="font-mono text-sm text-gray-300 mb-4">
+                          &gt; {project.tagline}
                         </p>
                       </div>
 
-                      {/* Features */}
-                      <div>
-                        <p className="font-mono text-xs mb-2" style={{ color: '#52525B' }}>// Key Features:</p>
-                        <ul className="space-y-2 text-sm font-mono leading-relaxed" style={{ color: '#71717A' }}>
-                          {project.features.map((feature, idx) => (
-                            <li key={idx} className="flex gap-2">
-                              <span className="mt-1" style={{ color: '#52525B' }}>•</span>
-                              <span>{feature}</span>
-                            </li>
-                          ))}
-                        </ul>
+                      {/* Metadata - Bracket Style */}
+                      <div className="space-y-1 font-mono text-sm">
+                        {Object.entries(project.metadata).map(([key, value]) => (
+                          <div key={key} className="flex">
+                            <span className="text-purple-400 min-w-[100px]">[{key.charAt(0).toUpperCase() + key.slice(1)}]:</span>
+                            <span className="text-gray-300">{value}</span>
+                          </div>
+                        ))}
                       </div>
 
-                      {/* Technologies */}
-                      <div className="font-mono text-xs pt-2" style={{ color: '#52525B' }}>
-                        <span>// Stack: </span>
-                        {project.technologies.join(', ')}
+                      {/* Tech Stack - Icon Badges */}
+                      <div>
+                        <p className="font-mono text-xs mb-2 text-gray-500">// Stack:</p>
+                        <div className="flex flex-wrap gap-2">
+                          {project.mainTech.map((tech, idx) => {
+                            const icon = getTechIcon(tech);
+                            return (
+                              <div
+                                key={idx}
+                                className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-800/50 border border-gray-700/50 rounded-md hover:border-purple-500/50 hover:bg-gray-800 transition-all duration-200 group/tech"
+                              >
+                                {icon && (
+                                  <span className="text-gray-400 group-hover/tech:text-purple-400 transition-colors">
+                                    {icon}
+                                  </span>
+                                )}
+                                <span className="text-xs font-mono text-gray-400 group-hover/tech:text-gray-300 transition-colors">
+                                  {tech}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
                       </div>
+
+                      {/* Collapsible Features */}
+                      {expandedProject === index && (
+                        <div className="animate-fade-in">
+                          <p className="font-mono text-xs mb-2 text-gray-500">// Key Features:</p>
+                          <ul className="space-y-2 text-sm font-mono leading-relaxed" style={{ color: '#71717A', listStyle: 'none', padding: 0 }}>
+                            {project.features.map((feature, idx) => (
+                              <li key={idx} className="flex gap-2">
+                                <span className="mt-1" style={{ color: '#52525B' }}>•</span>
+                                <span>{feature}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {/* Verbose Toggle */}
+                      <button
+                        onClick={() => setExpandedProject(expandedProject === index ? null : index)}
+                        className="font-mono text-xs text-purple-400 hover:text-purple-300 transition-colors"
+                      >
+                        {expandedProject === index ? '$ hide --all' : '$ show --all'}
+                      </button>
 
                       {/* Action Buttons */}
                       <div className="flex items-center gap-6 pt-4">
@@ -255,6 +425,16 @@ function Projects() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* End Marker */}
+          <div className={`relative mt-8 ${isVisible ? 'animate-slide-up-expo' : 'opacity-0'}`} style={{ animationDelay: `${projects.length * 0.2}s` }}>
+            <div className="absolute left-[130px] -translate-x-1/2">
+              <div
+                data-timeline-end
+                className="w-3 h-3 rounded-full bg-gray-700 border-2 border-gray-800"
+              ></div>
+            </div>
           </div>
         </div>
       </div>
