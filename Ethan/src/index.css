@@ -4,11 +4,13 @@
 html {
   scroll-snap-type: y proximity;
   overflow-y: scroll;
+  background: rgb(28, 28, 28);
 }
 
 body {
   margin: 0;
   padding: 0;
+  background: rgb(28, 28, 28);
 }
 
 /* Blinking cursor animation */

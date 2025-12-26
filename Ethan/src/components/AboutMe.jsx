@@ -127,7 +127,7 @@ function AboutMe() {
       <DotBackground />
 
       <motion.div
-        className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 relative z-10"
+        className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 relative z-10"
         style={{ opacity: aboutOpacity, scale: aboutScale, y: aboutY }}
       >
         {/* Left Side - System Log (60%) */}

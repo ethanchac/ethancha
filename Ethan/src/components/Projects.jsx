@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { Github, ExternalLink, Cloud } from 'lucide-react';
-import { SiReact, SiFlask, SiMongodb, SiSocketdotio, SiTailwindcss, SiSupabase, SiThreedotjs, SiGooglegemini } from 'react-icons/si';
+import { SiReact, SiFlask, SiMongodb, SiSocketdotio, SiTailwindcss, SiSupabase, SiThreedotjs, SiGooglegemini, SiNodedotjs, SiExpress, SiFirebase, SiSwift, SiPostgresql } from 'react-icons/si';
 import { Database, Map, Mail, Server, Mic } from 'lucide-react';
 import DotBackground from './DotBackground';
+import stashuPreview from '../assets/content.png';
+import carmeetsPreview from '../assets/Gemini_Generated_Image_3vlcss3vlcss3vlc.png';
 
 function Projects() {
   const [isVisible, setIsVisible] = useState(false);
@@ -51,6 +53,18 @@ function Projects() {
   // Convert percentage to string for CSS
   const progressHeight = useTransform(progressPercentage, (v) => `${v}%`);
 
+  // Track if timeline has reached the end
+  const [timelineComplete, setTimelineComplete] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = progressPercentage.on('change', (latest) => {
+      if (latest >= 99) {
+        setTimelineComplete(true);
+      }
+    });
+    return () => unsubscribe();
+  }, [progressPercentage]);
+
   // Tech icon mapping
   const getTechIcon = (tech) => {
     const iconMap = {
@@ -61,6 +75,7 @@ function Projects() {
       'Socket.IO': <SiSocketdotio className="w-4 h-4" />,
       'AWS S3': <Cloud className="w-4 h-4" />,
       'TailwindCSS': <SiTailwindcss className="w-4 h-4" />,
+      'Tailwind CSS': <SiTailwindcss className="w-4 h-4" />,
       'Supabase': <SiSupabase className="w-4 h-4" />,
       'Three.js': <SiThreedotjs className="w-4 h-4" />,
       'Gemini AI': <SiGooglegemini className="w-4 h-4" />,
@@ -68,6 +83,12 @@ function Projects() {
       'Leaflet': <Map className="w-4 h-4" />,
       'Sendgrid API': <Mail className="w-4 h-4" />,
       'Railway': <Server className="w-4 h-4" />,
+      'Node.js': <SiNodedotjs className="w-4 h-4" />,
+      'Express': <SiExpress className="w-4 h-4" />,
+      'Firebase': <SiFirebase className="w-4 h-4" />,
+      'Swift': <SiSwift className="w-4 h-4" />,
+      'SwiftUI': <SiSwift className="w-4 h-4" />,
+      'PostgreSQL': <SiPostgresql className="w-4 h-4" />,
     };
     return iconMap[tech] || null;
   };
@@ -116,6 +137,50 @@ function Projects() {
       github: "https://github.com/ethanchac/MedPal",
       live: "https://med-pal-one.vercel.app/",
       status: "deployed"
+    },
+    {
+      title: "Stashu",
+      version: "v1.0",
+      date: "2024",
+      shortDate: "2024",
+      tagline: "Personal messaging system to yourself.",
+      metadata: {
+        status: "In Development",
+        engine: "Node.js + React",
+        impact: "No more emailing yourself"
+      },
+      features: [
+        "Architected full-stack personal organization app with Discord-style channel system, enabling users to store notes, links, files, and images with real-time synchronization across web and mobile platforms",
+        "Built secure RESTful API with Express and Firebase, implementing JWT authentication, rate limiting (100 req/15min), and Firestore real-time listeners for instant cross-device updates without polling",
+        "Implemented scalable file upload system using AWS S3 presigned URLs with direct client-to-S3 transfers, bypassing backend for large files while maintaining security through validation and user-isolated storage paths"
+      ],
+      mainTech: ["React", "React Native", "Node.js", "Express", "Firebase", "AWS S3"],
+      technologies: ["React", "React Native", "Node.js", "Express", "Firebase", "AWS S3", "Tailwind CSS"],
+      github: "https://github.com/ethanchac/Stashu",
+      live: null,
+      status: "in-development"
+    },
+    {
+      title: "CarMeets",
+      version: "v1.0",
+      date: "2024",
+      shortDate: "2024",
+      tagline: "iOS app connecting car enthusiasts through meets and drives.",
+      metadata: {
+        status: "In Development",
+        engine: "SwiftUI + Node.js",
+        impact: "Location-based discovery"
+      },
+      features: [
+        "Built full-stack iOS application with native SwiftUI frontend and Node.js/Express backend, implementing location-based event discovery using MapKit and CoreLocation with real-time user tracking and distance-based filtering via Haversine formula",
+        "Engineered comprehensive event management system supporting static meets with custom polygon parking boundaries and multi-stop convoy routes, enabling users to create, host, and join automotive gatherings with role-based attendee management",
+        "Implemented real-time social features including friend system, messaging with conversation management, and smart polling for updates, integrated with Supabase PostgreSQL database featuring Row-Level Security policies for data isolation"
+      ],
+      mainTech: ["SwiftUI", "Node.js", "Express", "Supabase", "PostgreSQL"],
+      technologies: ["SwiftUI", "Swift", "Node.js", "Express", "Supabase", "PostgreSQL", "MapKit", "CoreLocation"],
+      github: "https://github.com/jacobamobin/carmeets",
+      live: null,
+      status: "in-development"
     }
   ];
 
@@ -204,7 +269,7 @@ function Projects() {
       {/* Faint dot grid background */}
       <DotBackground />
 
-      <div className="max-w-6xl mx-auto w-full relative z-10">
+      <div className="max-w-6xl w-full relative z-10">
         {/* Header */}
         <div className={`mb-16 ${isVisible ? 'animate-slide-up-expo' : 'opacity-0'}`}>
           <p className="text-sm font-mono text-gray-500 mb-2">&gt; git log --projects</p>
@@ -214,7 +279,7 @@ function Projects() {
         {/* Timeline */}
         <div className="relative" ref={timelineRef}>
           {/* Simple timeline - relative positioning, starts at first dot (top-1) */}
-          <div className="absolute left-[130px] top-1 bottom-8 w-px bg-gray-800 z-0"></div>
+          <div className="absolute left-[130px] top-1 bottom-0 w-px bg-gray-800 z-0"></div>
           <motion.div
             className="absolute left-[130px] top-1 w-px bg-white z-0"
             style={{
@@ -224,7 +289,7 @@ function Projects() {
           />
 
           {/* Project Entries */}
-          <div className="space-y-24">
+          <div className="space-y-24 pb-24">
             {projects.map((project, index) => (
               <div
                 key={index}
@@ -366,56 +431,66 @@ function Projects() {
 
                         {/* Project Preview */}
                         <div className="relative overflow-hidden bg-black/50 h-80">
-                          {project.title === 'Yapp' ? (
-                            <div className="w-full h-full bg-gradient-to-br from-orange-500/20 via-black to-orange-600/10 flex items-center justify-center p-8">
-                              <div className="text-center">
-                                <div className="text-orange-400 text-5xl font-bold mb-4 font-mono">Yapp</div>
-                                <div className="text-gray-400 text-base mb-6 font-mono">TMU Social Network</div>
-                                <div className="space-y-2 text-xs font-mono text-gray-500 text-left max-w-md">
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-green-500">✓</span>
-                                    <span>Real-time messaging</span>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-green-500">✓</span>
-                                    <span>Student verification</span>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-green-500">✓</span>
-                                    <span>AWS S3 media storage</span>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-green-500">✓</span>
-                                    <span>Flask RESTful API</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                          {project.title === 'Stashu' ? (
+                            <a
+                              href="https://github.com/ethanchac/Stashu"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-full h-full bg-white relative overflow-hidden block cursor-pointer group/preview"
+                            >
+                              <img
+                                src={stashuPreview}
+                                alt="Stashu Preview"
+                                className="w-full h-full object-contain"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent group-hover/preview:from-black/30 transition-all pointer-events-none"></div>
+                            </a>
+                          ) : project.title === 'Yapp' ? (
+                            <a
+                              href="https://yap-mu.vercel.app"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-full h-full bg-black relative overflow-hidden block cursor-pointer group/preview"
+                            >
+                              <iframe
+                                src="https://yap-mu.vercel.app"
+                                className="w-full h-full scale-[0.4] origin-top-left absolute pointer-events-none"
+                                style={{ width: '250%', height: '250%' }}
+                                title="Yapp Preview"
+                                scrolling="no"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 group-hover/preview:from-black/40 transition-all pointer-events-none"></div>
+                            </a>
                           ) : project.title === 'MedPal' ? (
-                            <div className="w-full h-full bg-gradient-to-br from-red-700/20 via-blue-600/10 to-red-800/15 flex items-center justify-center p-8">
-                              <div className="text-center">
-                                <div className="text-red-400 text-5xl font-bold mb-4 font-mono">MedPal</div>
-                                <div className="text-gray-400 text-base mb-6 font-mono">AI Medical Assistant</div>
-                                <div className="space-y-2 text-xs font-mono text-gray-500 text-left max-w-md">
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-blue-500">⚡</span>
-                                    <span>3D Avatar (Three.js)</span>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-blue-500">⚡</span>
-                                    <span>Google Gemini AI</span>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-blue-500">⚡</span>
-                                    <span>ElevenLabs Voice</span>
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-blue-500">⚡</span>
-                                    <span>Health tracking</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                            <a
+                              href="https://med-pal-one.vercel.app/"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-full h-full bg-black relative overflow-hidden block cursor-pointer group/preview"
+                            >
+                              <iframe
+                                src="https://med-pal-one.vercel.app/"
+                                className="w-full h-full scale-[0.4] origin-top-left absolute pointer-events-none"
+                                style={{ width: '250%', height: '250%' }}
+                                title="MedPal Preview"
+                                scrolling="no"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 group-hover/preview:from-black/40 transition-all pointer-events-none"></div>
+                            </a>
+                          ) : project.title === 'CarMeets' ? (
+                            <a
+                              href="https://github.com/jacobamobin/carmeets"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-full h-full bg-black relative overflow-hidden block cursor-pointer group/preview"
+                            >
+                              <img
+                                src={carmeetsPreview}
+                                alt="CarMeets Preview"
+                                className="w-full h-full object-cover"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent group-hover/preview:from-black/30 transition-all pointer-events-none"></div>
+                            </a>
                           ) : null}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
                         </div>
@@ -428,11 +503,15 @@ function Projects() {
           </div>
 
           {/* End Marker */}
-          <div className={`relative mt-8 ${isVisible ? 'animate-slide-up-expo' : 'opacity-0'}`} style={{ animationDelay: `${projects.length * 0.2}s` }}>
-            <div className="absolute left-[130px] -translate-x-1/2">
+          <div className={`relative ${isVisible ? 'animate-slide-up-expo' : 'opacity-0'}`} style={{ animationDelay: `${projects.length * 0.2}s` }}>
+            <div className="absolute left-[130px] -translate-x-1/2 top-0">
               <div
                 data-timeline-end
-                className="w-3 h-3 rounded-full bg-gray-700 border-2 border-gray-800"
+                className={`w-3 h-3 rounded-full transition-all duration-500 ${
+                  timelineComplete
+                    ? 'bg-white border-2 border-white shadow-[0_0_12px_rgba(255,255,255,0.8)]'
+                    : 'bg-gray-700 border-2 border-gray-800'
+                }`}
               ></div>
             </div>
           </div>

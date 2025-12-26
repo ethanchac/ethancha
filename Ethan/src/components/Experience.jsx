@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import DotBackground from './DotBackground';
-import { SiReact, SiFirebase, SiNodedotjs, SiTailwindcss } from 'react-icons/si';
-import { Database, Table } from 'lucide-react';
 
 function Experience() {
   const [isVisible, setIsVisible] = useState(false);
@@ -49,18 +47,17 @@ function Experience() {
   // Convert percentage to string for CSS
   const progressHeight = useTransform(progressPercentage, (v) => `${v}%`);
 
-  // Tech icon mapping
-  const getTechIcon = (tech) => {
-    const iconMap = {
-      'React': <SiReact className="w-4 h-4" />,
-      'Firebase': <SiFirebase className="w-4 h-4" />,
-      'Node.js': <SiNodedotjs className="w-4 h-4" />,
-      'Tailwind CSS': <SiTailwindcss className="w-4 h-4" />,
-      'TanStack Table': <Table className="w-4 h-4" />,
-      'Firestore': <Database className="w-4 h-4" />,
-    };
-    return iconMap[tech] || null;
-  };
+  // Track if timeline has reached the end
+  const [timelineComplete, setTimelineComplete] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = progressPercentage.on('change', (latest) => {
+      if (latest >= 99) {
+        setTimelineComplete(true);
+      }
+    });
+    return () => unsubscribe();
+  }, [progressPercentage]);
 
   const experiences = [
     {
@@ -72,8 +69,7 @@ function Experience() {
       highlights: [
         "Implemented real-time search for project management using TanStack React Table, integrating debounced input handling that reduced unnecessary re-renders by 75% and improved performance for datasets containing 500+ projects",
         "Developed 35+ reusable UI components using Radix UI, Tailwind CSS and Toast, reducing component development time by 50%"
-      ],
-      technologies: ["React", "Firebase", "TanStack Table", "Radix UI", "Tailwind CSS"]
+      ]
     },
     {
       company: "Paris Baguette",
@@ -85,8 +81,7 @@ function Experience() {
         "Developed and deployed a full-stack schedule planner for 30+ part-time workers using React, enabling managers to visually assign shifts based on time-slot availability",
         "Implemented a custom drag-and-drop scheduling algorithm (availability, max-days, and coverage rules), cutting admin work by 4–5 hours per week and improving shift coverage by 30%",
         "Fun fact: Built this while working part-time as a barista. Highly recommend."
-      ],
-      technologies: ["React", "Node.js", "Firebase", "Firestore"]
+      ]
     }
   ];
 
@@ -174,7 +169,7 @@ function Experience() {
       {/* Faint dot grid background */}
       <DotBackground />
 
-      <div className="max-w-6xl mx-auto w-full relative z-10">
+      <div className="max-w-6xl w-full relative z-10">
         {/* Header */}
         <div className={`mb-16 ${isVisible ? 'animate-slide-up-expo' : 'opacity-0'}`}>
           <p className="text-sm font-mono text-gray-500 mb-2">&gt; git log --experience</p>
@@ -184,7 +179,7 @@ function Experience() {
         {/* Experience Entries */}
         <div className="relative" ref={timelineRef}>
           {/* Simple timeline - relative positioning, starts at first dot (top-1) */}
-          <div className="absolute left-[130px] top-1 bottom-8 w-px bg-gray-800 z-0"></div>
+          <div className="absolute left-[130px] top-1 bottom-0 w-px bg-gray-800 z-0"></div>
           <motion.div
             className="absolute left-[130px] top-1 w-px bg-white z-0"
             style={{
@@ -193,7 +188,7 @@ function Experience() {
             }}
           />
 
-          <div className="space-y-16">
+          <div className="space-y-16 pb-16">
             {experiences.map((exp, index) => (
               <div
                 key={index}
@@ -255,28 +250,6 @@ function Experience() {
                         </li>
                       ))}
                     </ul>
-
-                    {/* Technologies - Icon Badges */}
-                    <div className="flex flex-wrap gap-2 pt-2">
-                      {exp.technologies.map((tech, idx) => {
-                        const icon = getTechIcon(tech);
-                        return (
-                          <div
-                            key={idx}
-                            className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-800/50 border border-gray-700/50 rounded-md hover:border-purple-500/50 hover:bg-gray-800 transition-all duration-200 group/tech"
-                          >
-                            {icon && (
-                              <span className="text-gray-400 group-hover/tech:text-purple-400 transition-colors">
-                                {icon}
-                              </span>
-                            )}
-                            <span className="text-xs font-mono text-gray-400 group-hover/tech:text-gray-300 transition-colors">
-                              {tech}
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </div>
                   </div>
                 </div>
               </div>
@@ -284,11 +257,15 @@ function Experience() {
           </div>
 
           {/* End Marker */}
-          <div className={`relative mt-8 ${isVisible ? 'animate-slide-up-expo' : 'opacity-0'}`} style={{ animationDelay: `${experiences.length * 0.2}s` }}>
-            <div className="absolute left-[130px] -translate-x-1/2">
+          <div className={`relative ${isVisible ? 'animate-slide-up-expo' : 'opacity-0'}`} style={{ animationDelay: `${experiences.length * 0.2}s` }}>
+            <div className="absolute left-[130px] -translate-x-1/2 top-0">
               <div
                 data-timeline-end
-                className="w-3 h-3 rounded-full bg-gray-700 border-2 border-gray-800"
+                className={`w-3 h-3 rounded-full transition-all duration-500 ${
+                  timelineComplete
+                    ? 'bg-white border-2 border-white shadow-[0_0_12px_rgba(255,255,255,0.8)]'
+                    : 'bg-gray-700 border-2 border-gray-800'
+                }`}
               ></div>
             </div>
           </div>

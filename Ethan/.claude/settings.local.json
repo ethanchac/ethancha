@@ -5,7 +5,9 @@
       "WebFetch(domain:yap-mu.vercel.app)",
       "WebFetch(domain:github.com)",
       "Bash(npm install framer-motion)",
-      "Bash(npm install react-icons)"
+      "Bash(npm install react-icons)",
+      "Bash(npm run build:*)",
+      "Bash(timeout 5 npm run preview:*)"
     ],
     "deny": [],
     "ask": []

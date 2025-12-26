@@ -25,9 +25,7 @@ function App() {
       <div id="contact" className="snap-section">
         <Contact />
       </div>
-      <div className="snap-section">
-        <Footer />
-      </div>
+      <Footer />
       <TabNavigation />
     </div>
   );
