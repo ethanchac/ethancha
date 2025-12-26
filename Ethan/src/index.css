@@ -260,3 +260,84 @@
 .sticky {
   position: sticky;
 }
+
+/* Exponential slide-up animations */
+@keyframes slide-up-expo {
+  0% {
+    opacity: 0;
+    transform: translateY(80px) scale(0.95);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-slide-up-expo {
+  animation: slide-up-expo 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-slide-up-expo-delay-1 {
+  animation: slide-up-expo 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s forwards;
+  opacity: 0;
+}
+
+.animate-slide-up-expo-delay-2 {
+  animation: slide-up-expo 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s forwards;
+  opacity: 0;
+}
+
+/* Fade-in animation for tooltips */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out forwards;
+}
+
+/* Powerline Tab Navigation Styles */
+.powerline-tab {
+  position: relative;
+  background: rgba(20, 20, 20, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  clip-path: polygon(
+    0 0,
+    calc(100% - 24px) 0,
+    100% 50%,
+    calc(100% - 24px) 100%,
+    0 100%
+  );
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.powerline-tab-active {
+  background: rgba(30, 30, 30, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 2px solid rgba(168, 85, 247, 0.5);
+  box-shadow: 0 -2px 8px rgba(168, 85, 247, 0.15);
+}
+
+.powerline-tab-inactive {
+  background: rgba(20, 20, 20, 0.7);
+}
+
+.powerline-tab-inactive:hover {
+  background: rgba(25, 25, 25, 0.8);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
