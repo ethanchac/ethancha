@@ -120,19 +120,19 @@ function AboutMe() {
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen relative overflow-hidden flex items-center px-8 md:px-16 lg:px-24 py-20"
+      className="min-h-screen relative overflow-hidden flex items-center px-4 sm:px-8 md:px-16 lg:px-24 py-12 sm:py-16 md:py-20"
       style={{ backgroundColor: 'rgb(28, 28, 28)' }}
     >
       {/* Faint dot grid background */}
       <DotBackground />
 
       <motion.div
-        className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 relative z-10"
+        className="max-w-7xl w-full mx-auto grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 relative z-10"
         style={{ opacity: aboutOpacity, scale: aboutScale, y: aboutY }}
       >
         {/* Left Side - System Log (60%) */}
         <div
-          className={`lg:col-span-3 space-y-8 ${
+          className={`lg:col-span-3 space-y-6 md:space-y-8 ${
             isVisible ? 'animate-slide-up-expo' : 'opacity-0 translate-y-20'
           }`}
           style={{
@@ -141,38 +141,38 @@ function AboutMe() {
         >
           {/* Header */}
           <div className="space-y-2">
-            <p className="text-sm font-mono text-gray-500">&gt; system_info.log</p>
-            <h2 className="text-4xl md:text-5xl font-bold font-mono text-white">
+            <p className="text-xs sm:text-sm font-mono text-gray-500">&gt; system_info.log</p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-mono text-white">
               About Me
             </h2>
           </div>
 
           {/* System Log */}
-          <div className="space-y-4 font-mono text-sm md:text-base">
-            <div className="flex transition-all duration-300">
-              <span className={`min-w-[140px] transition-all duration-500 ${
+          <div className="space-y-3 md:space-y-4 font-mono text-xs sm:text-sm md:text-base">
+            <div className="flex flex-col sm:flex-row transition-all duration-300">
+              <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${
                 isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
               }`}>[Location]:</span>
               <span className="text-gray-300">{bioData.location}</span>
             </div>
 
-            <div className="flex transition-all duration-300">
-              <span className={`min-w-[140px] transition-all duration-500 ${
+            <div className="flex flex-col sm:flex-row transition-all duration-300">
+              <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${
                 isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
               }`}>[Focus]:</span>
               <span className="text-gray-300">{bioData.focus}</span>
             </div>
 
-            <div className="flex transition-all duration-300">
-              <span className={`min-w-[140px] transition-all duration-500 ${
+            <div className="flex flex-col sm:flex-row transition-all duration-300">
+              <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${
                 isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
               }`}>[Philosophy]:</span>
               <span className="text-gray-300">{bioData.philosophy}</span>
             </div>
 
             <div className="transition-all duration-300 relative">
-              <div className="flex items-start">
-                <span className={`min-w-[140px] transition-all duration-500 ${
+              <div className="flex flex-col sm:flex-row items-start">
+                <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${
                   isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
                 }`}>[Skills]:</span>
                 <div className="flex-1">
@@ -190,12 +190,12 @@ function AboutMe() {
               {/* VSCode Terminal-Style Overlay */}
               {skillsExpanded && (
                 <div
-                  className="absolute left-0 top-full mt-2 z-50 animate-fade-in"
+                  className="absolute left-0 top-full mt-2 z-50 animate-fade-in w-full max-w-[500px]"
                   onMouseEnter={() => setSkillsExpanded(true)}
                   onMouseLeave={() => setSkillsExpanded(false)}
                 >
                   {/* Terminal Window */}
-                  <div className="bg-[#1e1e1e] border border-[#3c3c3c] rounded-md shadow-2xl overflow-hidden min-w-[500px]">
+                  <div className="bg-[#1e1e1e] border border-[#3c3c3c] rounded-md shadow-2xl overflow-hidden w-full">
                     {/* Terminal Header */}
                     <div className="bg-[#2d2d30] px-3 py-1.5 flex items-center justify-between border-b border-[#3c3c3c]">
                       <div className="flex items-center gap-2">
@@ -235,15 +235,15 @@ function AboutMe() {
               )}
             </div>
 
-            <div className="flex transition-all duration-300">
-              <span className={`min-w-[140px] transition-all duration-500 ${
+            <div className="flex flex-col sm:flex-row transition-all duration-300">
+              <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${
                 isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
               }`}>[Interests]:</span>
               <span className="text-gray-300">{bioData.interests.join(', ')}</span>
             </div>
 
-            <div className="flex transition-all duration-300">
-              <span className={`min-w-[140px] transition-all duration-500 ${
+            <div className="flex flex-col sm:flex-row transition-all duration-300">
+              <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${
                 isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
               }`}>[Availability]:</span>
               <span className="text-gray-300">{bioData.availability}</span>
@@ -252,13 +252,13 @@ function AboutMe() {
             {/* Live Data Section */}
             <div className="h-px w-full bg-purple-500/20 my-2"></div>
 
-            <div className="flex transition-all duration-300">
-              <span className="text-green-400 min-w-[140px] animate-pulse">[Local_Time]:</span>
+            <div className="flex flex-col sm:flex-row transition-all duration-300">
+              <span className="text-green-400 sm:min-w-[140px] mb-1 sm:mb-0 animate-pulse">[Local_Time]:</span>
               <span className="text-gray-300">{formatTime()}</span>
             </div>
 
-            <div className="flex transition-all duration-300">
-              <span className="text-green-400 min-w-[140px] animate-pulse">[Currently_Building]:</span>
+            <div className="flex flex-col sm:flex-row transition-all duration-300">
+              <span className="text-green-400 sm:min-w-[140px] mb-1 sm:mb-0 animate-pulse">[Currently_Building]:</span>
               <span className="text-gray-300">{bioData.currentlyBuilding}</span>
             </div>
           </div>
@@ -268,7 +268,7 @@ function AboutMe() {
             isVisible ? 'animate-slide-up-expo-delay-1' : 'opacity-0 translate-y-20'
           }`}>
             <div className="h-px w-16 bg-purple-500/50"></div>
-            <p className="text-base md:text-lg font-mono text-gray-300 leading-relaxed max-w-2xl">
+            <p className="text-sm sm:text-base md:text-lg font-mono text-gray-300 leading-relaxed max-w-2xl">
               I build web experiences where everything feels right. I realized the best technology is invisible and it quietly does its thing so people can focus on what actually matters. No drama, no crashes, just smooth sailing.
             </p>
           </div>
@@ -278,7 +278,7 @@ function AboutMe() {
         <div className={`lg:col-span-2 ${
           isVisible ? 'animate-slide-up-expo-delay-2' : 'opacity-0 translate-y-20'
         }`}>
-          <div className="code-window sticky top-24">
+          <div className="code-window lg:sticky lg:top-24">
             {/* macOS Window Controls */}
             <div className="window-header">
               <div className="window-controls">
@@ -303,7 +303,7 @@ function AboutMe() {
                 </div>
 
                 {/* Image Container */}
-                <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 h-[400px]">
+                <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 h-[300px] sm:h-[350px] md:h-[400px]">
                   {/* Profile Image */}
                   <img
                     src={profileImage}

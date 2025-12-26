@@ -7,7 +7,9 @@
       "Bash(npm install framer-motion)",
       "Bash(npm install react-icons)",
       "Bash(npm run build:*)",
-      "Bash(timeout 5 npm run preview:*)"
+      "Bash(timeout 5 npm run preview:*)",
+      "Bash(npm install:*)",
+      "Bash(sudo npm install:*)"
     ],
     "deny": [],
     "ask": []
