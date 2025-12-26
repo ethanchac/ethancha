@@ -308,9 +308,9 @@ function Projects() {
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+                  <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 md:gap-8">
                     {/* Left Side - Project Details */}
-                    <div className="space-y-3 md:space-y-4">
+                    <div className="lg:col-span-3 space-y-3 md:space-y-4">
                       {/* Title */}
                       <div>
                         <h3 className="text-xl sm:text-2xl font-mono font-semibold mb-2 md:mb-3" style={{ color: '#FFFFFF' }}>
@@ -413,7 +413,7 @@ function Projects() {
                     </div>
 
                     {/* Right Side - Project Preview Window */}
-                    <div className="order-first lg:order-last">
+                    <div className="lg:col-span-2 order-first lg:order-last">
                       <div className="code-window">
                         {/* macOS Window Controls */}
                         <div className="window-header">
@@ -426,7 +426,7 @@ function Projects() {
                         </div>
 
                         {/* Project Preview */}
-                        <div className="relative overflow-hidden bg-black/50 h-64 sm:h-72 md:h-80">
+                        <div className="relative overflow-hidden bg-black/50 h-[300px] sm:h-[350px] md:h-[400px]">
                           {project.title === 'Stashu' ? (
                             <a
                               href="https://github.com/ethanchac/Stashu"
