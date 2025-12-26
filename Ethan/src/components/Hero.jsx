@@ -1,49 +1,230 @@
-import { Github, Linkedin, Mail, ExternalLink, ChevronDown } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Linkedin } from 'lucide-react';
+import CodeWindow from './CodeWindow';
 
 function Hero() {
+  const [displayIntro, setDisplayIntro] = useState('');
+  const [displayName, setDisplayName] = useState('');
+  const [phase, setPhase] = useState('intro');
+  const [showCursor, setShowCursor] = useState(true);
+  const [pulseActive, setPulseActive] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isTyping, setIsTyping] = useState(true);
+  const [editableIntro, setEditableIntro] = useState("Hello world, I'm");
+  const [editableName, setEditableName] = useState('Ethan Cha');
+  const [editableTagline, setEditableTagline] = useState('I just like building things that work.');
+  const dotsRef = useRef(null);
+
+  const introText = "Hello world, I'm";
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (dotsRef.current) {
+        const rect = dotsRef.current.getBoundingClientRect();
+        setMousePos({
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top,
+        });
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  useEffect(() => {
+    let timeout;
+
+    // Variable typing speeds for different parts
+    const getTypingSpeed = (text, index) => {
+      // Fast for "Hello"
+      if (index < 5) return 60 + Math.random() * 30;
+      // Normal for " world, I'm"
+      if (index < introText.length) return 80 + Math.random() * 40;
+      return 80 + Math.random() * 40;
+    };
+
+    if (phase === 'intro') {
+      if (displayIntro.length < introText.length) {
+        setIsTyping(true);
+        timeout = setTimeout(() => {
+          setDisplayIntro(introText.slice(0, displayIntro.length + 1));
+        }, getTypingSpeed(introText, displayIntro.length));
+      } else {
+        setIsTyping(false);
+        timeout = setTimeout(() => {
+          setPhase('name-start');
+        }, 600); // Pause with blinking cursor
+      }
+    } else if (phase === 'name-start') {
+      if (displayName.length < 'Ethan '.length) {
+        setIsTyping(true);
+        timeout = setTimeout(() => {
+          setDisplayName('Ethan '.slice(0, displayName.length + 1));
+        }, 80 + Math.random() * 40);
+      } else {
+        setPhase('typo');
+      }
+    } else if (phase === 'typo') {
+      if (displayName.length < 'Ethan Cn'.length) {
+        setIsTyping(true);
+        // Slower/hesitant before the typo
+        const delay = displayName.length === 'Ethan C'.length ? 150 + Math.random() * 50 : 80 + Math.random() * 40;
+        timeout = setTimeout(() => {
+          setDisplayName('Ethan Cn'.slice(0, displayName.length + 1));
+        }, delay);
+      } else {
+        setIsTyping(false);
+        timeout = setTimeout(() => {
+          setPhase('delete');
+        }, 700); // Longer pause when realizing mistake
+      }
+    } else if (phase === 'delete') {
+      if (displayName.length > 'Ethan '.length) {
+        setIsTyping(true);
+        timeout = setTimeout(() => {
+          setDisplayName(displayName.slice(0, -1));
+        }, 30); // Very fast backspace
+      } else {
+        setPhase('correct');
+      }
+    } else if (phase === 'correct') {
+      if (displayName.length < 'Ethan Cha'.length) {
+        setIsTyping(true);
+        timeout = setTimeout(() => {
+          setDisplayName('Ethan Cha'.slice(0, displayName.length + 1));
+        }, 80 + Math.random() * 40);
+      } else {
+        setIsTyping(false);
+        timeout = setTimeout(() => {
+          setShowCursor(false);
+          setPhase('done');
+          setPulseActive(true);
+        }, 500);
+      }
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayIntro, displayName, phase]);
+
+  const generateDots = () => {
+    const dots = [];
+    const spacing = 50;
+    const cols = Math.ceil(window.innerWidth / spacing);
+    const rows = Math.ceil(window.innerHeight / spacing);
+
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
+        const x = j * spacing;
+        const y = i * spacing;
+
+        // Distance from center for pulse effect
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        const distanceFromCenter = Math.sqrt(
+          Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2)
+        );
+
+        // Very faint opacity
+        let opacity = 0.05;
+
+        // Pulse effect when typing is done
+        if (pulseActive) {
+          const pulseDelay = distanceFromCenter / 500;
+          opacity = 0.05;
+        }
+
+        dots.push(
+          <div
+            key={`${i}-${j}`}
+            className={`absolute w-1 h-1 bg-white rounded-full ${pulseActive ? 'animate-dot-pulse' : ''}`}
+            style={{
+              left: `${x}px`,
+              top: `${y}px`,
+              opacity: opacity,
+              animationDelay: pulseActive ? `${distanceFromCenter / 1000}s` : '0s',
+            }}
+          />
+        );
+      }
+    }
+    return dots;
+  };
+
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
-      <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+    <section
+      className="min-h-screen flex items-center px-8 md:px-16 lg:px-24 relative overflow-hidden"
+      style={{ backgroundColor: 'rgb(28, 28, 28)' }}
+    >
+      {/* Faint dot grid background */}
+      <div ref={dotsRef} className="absolute inset-0 pointer-events-none">
+        {generateDots()}
       </div>
-      
-      <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-        <div className="mb-8">
-          <div className="w-36 h-36 mx-auto mb-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-5xl font-bold shadow-2xl ring-4 ring-blue-500/30 hover:ring-purple-500/30 transition-all duration-500 hover:scale-105">
-            ED
-          </div>
-          <h1 className="text-6xl md:text-7xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent mb-6 animate-fade-in">
-            Ethan Doe
-          </h1>
-          <p className="text-2xl md:text-3xl text-blue-300 mb-8 font-light">
-            Full Stack Developer & Creative Technologist
-          </p>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto mb-12 leading-relaxed">
-            Crafting elegant digital experiences with cutting-edge technologies 
-            and innovative design solutions that push boundaries.
-          </p>
-        </div>
-        
-        <div className="flex justify-center space-x-8 mb-16">
-          <a href="#" className="group p-4 bg-gray-800/50 backdrop-blur-sm rounded-full border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-500/25">
-            <Github className="w-7 h-7 text-gray-300 group-hover:text-blue-400 transition-colors" />
-          </a>
-          <a href="#" className="group p-4 bg-gray-800/50 backdrop-blur-sm rounded-full border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-500/25">
-            <Linkedin className="w-7 h-7 text-gray-300 group-hover:text-blue-400 transition-colors" />
-          </a>
-          <a href="#" className="group p-4 bg-gray-800/50 backdrop-blur-sm rounded-full border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-blue-500/25">
-            <Mail className="w-7 h-7 text-gray-300 group-hover:text-blue-400 transition-colors" />
-          </a>
-        </div>
-        
-        <button 
-          onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-          className="group animate-bounce hover:animate-none"
+
+      {/* Left side - Main text */}
+      <div className="max-w-5xl relative z-10 w-full lg:w-1/2">
+        <p
+          className="text-lg md:text-xl mb-4 font-mono"
+          style={{ color: 'rgb(240, 240, 240)' }}
         >
-          <ChevronDown className="w-10 h-10 text-gray-400 group-hover:text-blue-400 transition-colors duration-300" />
-        </button>
+          {phase === 'done' ? editableIntro : displayIntro}
+          {phase === 'intro' && showCursor && (
+            isTyping ? <span>█</span> : <span className="animate-blink">_</span>
+          )}
+        </p>
+
+        <h1
+          className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 font-mono tracking-tight"
+          style={{
+            color: 'rgb(240, 240, 240)',
+            letterSpacing: '0.05em'
+          }}
+        >
+          {phase === 'done' ? editableName : displayName}
+          {phase !== 'intro' && phase !== 'done' && showCursor && (
+            isTyping ? <span>█</span> : <span className="animate-blink">_</span>
+          )}
+        </h1>
+
+        <p
+          className="text-base md:text-lg font-mono mb-8"
+          style={{ color: 'rgb(240, 240, 240)' }}
+        >
+          {editableTagline}
+        </p>
+
+        <div className="flex items-center space-x-3">
+          <span
+            className="text-base md:text-lg font-mono"
+            style={{ color: 'rgb(240, 240, 240)' }}
+          >
+            &gt;
+          </span>
+          <a
+            href="http://linkedin.com/in/ethan-cha-5692b8372"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="terminal-link text-base md:text-lg font-mono transition-all underline decoration-dotted underline-offset-4"
+          >
+            contact_me.sh
+          </a>
+        </div>
+      </div>
+
+      {/* Right side - Code Window */}
+      <div className="hidden lg:block absolute right-8 top-1/2 -translate-y-1/2 w-[500px] xl:w-[600px]">
+        <CodeWindow
+          phase={phase}
+          displayIntro={displayIntro}
+          displayName={displayName}
+          isTyping={isTyping}
+          editableIntro={editableIntro}
+          editableName={editableName}
+          editableTagline={editableTagline}
+          onIntroChange={setEditableIntro}
+          onNameChange={setEditableName}
+          onTaglineChange={setEditableTagline}
+        />
       </div>
     </section>
   );
