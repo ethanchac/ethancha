@@ -269,7 +269,7 @@ function Projects() {
       {/* Faint dot grid background */}
       <DotBackground />
 
-      <div className="max-w-6xl w-full relative z-10">
+      <div className="w-full relative z-10">
         {/* Header */}
         <div className={`mb-12 md:mb-16 ${isVisible ? 'animate-slide-up-expo' : 'opacity-0'}`}>
           <p className="text-xs sm:text-sm font-mono text-gray-500 mb-2">&gt; git log --projects</p>

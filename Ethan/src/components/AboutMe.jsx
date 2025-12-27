@@ -127,7 +127,7 @@ function AboutMe() {
       <DotBackground />
 
       <motion.div
-        className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 relative z-10"
+        className="w-full grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 relative z-10 lg:items-end"
         style={{ opacity: aboutOpacity, scale: aboutScale, y: aboutY }}
       >
         {/* Left Side - System Log (60%) */}
@@ -303,7 +303,7 @@ function AboutMe() {
                 </div>
 
                 {/* Image Container */}
-                <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 h-[300px] sm:h-[350px] md:h-[400px]">
+                <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700/50 h-[280px] sm:h-[320px] md:h-[380px] lg:h-[420px]">
                   {/* Profile Image */}
                   <img
                     src={profileImage}
