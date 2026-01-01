@@ -132,9 +132,8 @@ function AboutMe() {
       >
         {/* Left Side - System Log (60%) */}
         <div
-          className={`lg:col-span-3 space-y-6 md:space-y-8 ${
-            isVisible ? 'animate-slide-up-expo' : 'opacity-0 translate-y-20'
-          }`}
+          className={`lg:col-span-3 space-y-6 md:space-y-8 ${isVisible ? 'animate-slide-up-expo' : 'opacity-0 translate-y-20'
+            }`}
           style={{
             transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
           }}
@@ -150,31 +149,27 @@ function AboutMe() {
           {/* System Log */}
           <div className="space-y-3 md:space-y-4 font-mono text-xs sm:text-sm md:text-base">
             <div className="flex flex-col sm:flex-row transition-all duration-300">
-              <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${
-                isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
-              }`}>[Location]:</span>
+              <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
+                }`}>[Location]:</span>
               <span className="text-gray-300">{bioData.location}</span>
             </div>
 
             <div className="flex flex-col sm:flex-row transition-all duration-300">
-              <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${
-                isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
-              }`}>[Focus]:</span>
+              <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
+                }`}>[Focus]:</span>
               <span className="text-gray-300">{bioData.focus}</span>
             </div>
 
             <div className="flex flex-col sm:flex-row transition-all duration-300">
-              <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${
-                isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
-              }`}>[Philosophy]:</span>
+              <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
+                }`}>[Philosophy]:</span>
               <span className="text-gray-300">{bioData.philosophy}</span>
             </div>
 
             <div className="transition-all duration-300 relative">
               <div className="flex flex-col sm:flex-row items-start">
-                <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${
-                  isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
-                }`}>[Skills]:</span>
+                <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
+                  }`}>[Skills]:</span>
                 <div className="flex-1">
                   <span className="text-gray-300">{bioData.topSkills.join(', ')}</span>
                   <span
@@ -236,16 +231,14 @@ function AboutMe() {
             </div>
 
             <div className="flex flex-col sm:flex-row transition-all duration-300">
-              <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${
-                isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
-              }`}>[Interests]:</span>
+              <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
+                }`}>[Interests]:</span>
               <span className="text-gray-300">{bioData.interests.join(', ')}</span>
             </div>
 
             <div className="flex flex-col sm:flex-row transition-all duration-300">
-              <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${
-                isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
-              }`}>[Availability]:</span>
+              <span className={`sm:min-w-[140px] mb-1 sm:mb-0 transition-all duration-500 ${isInView ? 'text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]' : 'text-purple-400'
+                }`}>[Availability]:</span>
               <span className="text-gray-300">{bioData.availability}</span>
             </div>
 
@@ -264,9 +257,8 @@ function AboutMe() {
           </div>
 
           {/* Summary Paragraph */}
-          <div className={`space-y-4 ${
-            isVisible ? 'animate-slide-up-expo-delay-1' : 'opacity-0 translate-y-20'
-          }`}>
+          <div className={`space-y-4 ${isVisible ? 'animate-slide-up-expo-delay-1' : 'opacity-0 translate-y-20'
+            }`}>
             <div className="h-px w-16 bg-purple-500/50"></div>
             <p className="text-sm sm:text-base md:text-lg font-mono text-gray-300 leading-relaxed max-w-2xl">
               I build web experiences where everything feels right. I realized the best technology is invisible and it quietly does its thing so people can focus on what actually matters. No drama, no crashes, just smooth sailing.
@@ -275,9 +267,8 @@ function AboutMe() {
         </div>
 
         {/* Right Side - Media Inspector Window (40%) */}
-        <div className={`lg:col-span-2 ${
-          isVisible ? 'animate-slide-up-expo-delay-2' : 'opacity-0 translate-y-20'
-        }`}>
+        <div className={`lg:col-span-2 ${isVisible ? 'animate-slide-up-expo-delay-2' : 'opacity-0 translate-y-20'
+          }`}>
           <div className="code-window lg:sticky lg:top-24">
             {/* macOS Window Controls */}
             <div className="window-header">
@@ -294,11 +285,10 @@ function AboutMe() {
               {/* Profile Image Container with Glow */}
               <div className="relative group">
                 {/* Purple/Blue Backlight Glow - Synced with navigation */}
-                <div className={`absolute inset-0 blur-2xl transition-all duration-500 ${
-                  isInView
+                <div className={`absolute inset-0 blur-2xl transition-all duration-500 ${isInView
                     ? 'opacity-80 animate-pulse'
                     : 'opacity-60 group-hover:opacity-80'
-                }`}>
+                  }`}>
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500 via-blue-500 to-violet-600 rounded-2xl"></div>
                 </div>
 

@@ -9,7 +9,8 @@
       "Bash(npm run build:*)",
       "Bash(timeout 5 npm run preview:*)",
       "Bash(npm install:*)",
-      "Bash(sudo npm install:*)"
+      "Bash(sudo npm install:*)",
+      "Bash(dig:*)"
     ],
     "deny": [],
     "ask": []

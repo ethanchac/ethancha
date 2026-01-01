@@ -269,7 +269,7 @@ function Projects() {
       {/* Faint dot grid background */}
       <DotBackground />
 
-      <div className="max-w-6xl w-full relative z-10">
+      <div className="max-w-[1400px] w-full relative z-10">
         {/* Header */}
         <div className={`mb-12 md:mb-16 ${isVisible ? 'animate-slide-up-expo' : 'opacity-0'}`}>
           <p className="text-xs sm:text-sm font-mono text-gray-500 mb-2">&gt; git log --projects</p>
@@ -284,9 +284,8 @@ function Projects() {
             {projects.map((project, index) => (
               <div
                 key={index}
-                className={`relative group ${
-                  isVisible ? 'animate-slide-up-expo' : 'opacity-0'
-                }`}
+                className={`relative group ${isVisible ? 'animate-slide-up-expo' : 'opacity-0'
+                  }`}
                 style={{
                   animationDelay: `${index * 0.2}s`,
                 }}
@@ -294,205 +293,202 @@ function Projects() {
 
                 {/* Flex container for dot + content */}
                 <div className="flex gap-4 md:gap-6 lg:gap-8">
-                  {/* Commit Node */}
-                  <div className="flex-shrink-0 relative w-3">
-                    <div
-                      data-timeline-dot
-                      className={`hidden md:block w-3 h-3 rounded-full transition-all duration-300 z-10 ${
-                        project.status === 'deployed'
-                          ? 'bg-green-500 border-2 border-green-400 shadow-[0_0_12px_rgba(34,197,94,0.5)]'
-                          : 'bg-yellow-500 border-2 border-yellow-400 shadow-[0_0_12px_rgba(234,179,8,0.5)]'
-                      }`}
-                    />
-                  </div>
+                  {/* Dot column removed - moving to title */}
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
-                  <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 md:gap-8">
-                    {/* Left Side - Project Details */}
-                    <div className="lg:col-span-3 space-y-3 md:space-y-4">
-                      {/* Title */}
-                      <div>
-                        <h3 className="text-xl sm:text-2xl font-mono font-semibold mb-2 md:mb-3" style={{ color: '#FFFFFF' }}>
-                          {project.title}
-                        </h3>
-                        <p className="font-mono text-xs sm:text-sm text-gray-300 mb-3 md:mb-4">
-                          &gt; {project.tagline}
-                        </p>
-                      </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+                      {/* Left Side - Project Details */}
+                      <div className="lg:col-span-5 space-y-3 md:space-y-4">
+                        {/* Title */}
+                        <div>
+                          <h3 className="text-xl sm:text-2xl font-mono font-semibold mb-2 md:mb-3 flex items-center gap-3" style={{ color: '#FFFFFF' }}>
+                            <div
+                              className={`w-3 h-3 rounded-full transition-all duration-300 ${project.status === 'deployed'
+                                ? 'bg-green-500 border-2 border-green-400 shadow-[0_0_12px_rgba(34,197,94,0.5)]'
+                                : 'bg-yellow-500 border-2 border-yellow-400 shadow-[0_0_12px_rgba(234,179,8,0.5)]'
+                                }`}
+                            />
+                            {project.title}
+                          </h3>
+                          <p className="font-mono text-xs sm:text-sm text-gray-300 mb-3 md:mb-4">
+                            &gt; {project.tagline}
+                          </p>
+                        </div>
 
-                      {/* Metadata - Bracket Style */}
-                      <div className="space-y-1 font-mono text-xs sm:text-sm">
-                        {Object.entries(project.metadata).map(([key, value]) => (
-                          <div key={key} className="flex flex-col sm:flex-row">
-                            <span className="text-purple-400 sm:min-w-[100px] mb-0.5 sm:mb-0">[{key.charAt(0).toUpperCase() + key.slice(1)}]:</span>
-                            <span className="text-gray-300">{value}</span>
-                          </div>
-                        ))}
-                      </div>
+                        {/* Metadata - Bracket Style */}
+                        <div className="space-y-1 font-mono text-xs sm:text-sm">
+                          {Object.entries(project.metadata).map(([key, value]) => (
+                            <div key={key} className="flex flex-col sm:flex-row">
+                              <span className="text-purple-400 sm:min-w-[100px] mb-0.5 sm:mb-0">[{key.charAt(0).toUpperCase() + key.slice(1)}]:</span>
+                              <span className="text-gray-300">{value}</span>
+                            </div>
+                          ))}
+                        </div>
 
-                      {/* Tech Stack - Icon Badges */}
-                      <div>
-                        <p className="font-mono text-xs mb-2 text-gray-500">// Stack:</p>
-                        <div className="flex flex-wrap gap-2">
-                          {project.mainTech.map((tech, idx) => {
-                            const icon = getTechIcon(tech);
-                            return (
-                              <div
-                                key={idx}
-                                className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-800/50 border border-gray-700/50 rounded-md hover:border-purple-500/50 hover:bg-gray-800 transition-all duration-200 group/tech"
-                              >
-                                {icon && (
-                                  <span className="text-gray-400 group-hover/tech:text-purple-400 transition-colors">
-                                    {icon}
+                        {/* Tech Stack - Icon Badges */}
+                        <div>
+                          <p className="font-mono text-xs mb-2 text-gray-500">// Stack:</p>
+                          <div className="flex flex-wrap gap-2">
+                            {project.mainTech.map((tech, idx) => {
+                              const icon = getTechIcon(tech);
+                              return (
+                                <div
+                                  key={idx}
+                                  className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-800/50 border border-gray-700/50 rounded-md hover:border-purple-500/50 hover:bg-gray-800 transition-all duration-200 group/tech"
+                                >
+                                  {icon && (
+                                    <span className="text-gray-400 group-hover/tech:text-purple-400 transition-colors">
+                                      {icon}
+                                    </span>
+                                  )}
+                                  <span className="text-xs font-mono text-gray-400 group-hover/tech:text-gray-300 transition-colors">
+                                    {tech}
                                   </span>
-                                )}
-                                <span className="text-xs font-mono text-gray-400 group-hover/tech:text-gray-300 transition-colors">
-                                  {tech}
-                                </span>
-                              </div>
-                            );
-                          })}
+                                </div>
+                              );
+                            })}
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Collapsible Features */}
-                      {expandedProject === index && (
-                        <div className="animate-fade-in">
-                          <p className="font-mono text-xs mb-2 text-gray-500">// Key Features:</p>
-                          <ul className="space-y-2 text-xs sm:text-sm font-mono leading-relaxed" style={{ color: '#71717A', listStyle: 'none', padding: 0 }}>
-                            {project.features.map((feature, idx) => (
-                              <li key={idx} className="flex gap-2">
-                                <span className="mt-1 flex-shrink-0" style={{ color: '#52525B' }}>•</span>
-                                <span>{feature}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
+                        {/* Collapsible Features */}
+                        {expandedProject === index && (
+                          <div className="animate-fade-in">
+                            <p className="font-mono text-xs mb-2 text-gray-500">// Key Features:</p>
+                            <ul className="space-y-2 text-xs sm:text-sm font-mono leading-relaxed" style={{ color: '#71717A', listStyle: 'none', padding: 0 }}>
+                              {project.features.map((feature, idx) => (
+                                <li key={idx} className="flex gap-2">
+                                  <span className="mt-1 flex-shrink-0" style={{ color: '#52525B' }}>•</span>
+                                  <span>{feature}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
 
-                      {/* Verbose Toggle */}
-                      <button
-                        onClick={() => setExpandedProject(expandedProject === index ? null : index)}
-                        className="font-mono text-xs text-purple-400 hover:text-purple-300 transition-colors"
-                      >
-                        {expandedProject === index ? '$ hide --all' : '$ show --all'}
-                      </button>
-
-                      {/* Action Buttons */}
-                      <div className="flex items-center gap-4 sm:gap-6 pt-3 md:pt-4">
-                        <a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 font-mono text-xs sm:text-sm transition-all duration-300 hover:scale-105"
-                          style={{ color: '#A1A1AA' }}
+                        {/* Verbose Toggle */}
+                        <button
+                          onClick={() => setExpandedProject(expandedProject === index ? null : index)}
+                          className="group/btn flex items-center gap-2 px-3 py-1.5 mt-2 font-mono text-xs font-medium text-purple-400 bg-purple-500/10 border border-purple-500/20 rounded-md transition-all duration-300 hover:bg-purple-500/20 hover:border-purple-500/40 hover:shadow-[0_0_15px_rgba(168,85,247,0.15)]"
                         >
-                          <Github className="w-3 h-3 sm:w-4 sm:h-4" />
-                          <span className="relative group/link">
-                            View Code
-                            <span className="absolute bottom-0 left-0 w-0 h-px bg-white transition-all duration-300 group-hover/link:w-full"></span>
-                          </span>
-                        </a>
-                        {project.live && (
+                          <span className="text-purple-500/70 group-hover/btn:text-purple-400 transition-colors">$</span>
+                          {expandedProject === index ? 'hide --description' : 'show --description'}
+                        </button>
+
+                        {/* Action Buttons */}
+                        <div className="flex items-center gap-4 sm:gap-6 pt-3 md:pt-4">
                           <a
-                            href={project.live}
+                            href={project.github}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center gap-2 font-mono text-xs sm:text-sm transition-all duration-300 hover:scale-105"
-                            style={{ color: '#FFFFFF' }}
+                            style={{ color: '#A1A1AA' }}
                           >
-                            <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4" />
+                            <Github className="w-3 h-3 sm:w-4 sm:h-4" />
                             <span className="relative group/link">
-                              Live Demo
+                              View Code
                               <span className="absolute bottom-0 left-0 w-0 h-px bg-white transition-all duration-300 group-hover/link:w-full"></span>
                             </span>
                           </a>
-                        )}
+                          {project.live && (
+                            <a
+                              href={project.live}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-2 font-mono text-xs sm:text-sm transition-all duration-300 hover:scale-105"
+                              style={{ color: '#FFFFFF' }}
+                            >
+                              <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4" />
+                              <span className="relative group/link">
+                                Live Demo
+                                <span className="absolute bottom-0 left-0 w-0 h-px bg-white transition-all duration-300 group-hover/link:w-full"></span>
+                              </span>
+                            </a>
+                          )}
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Right Side - Project Preview Window */}
-                    <div className="lg:col-span-2 order-first lg:order-last">
-                      <div className="code-window">
-                        {/* macOS Window Controls */}
-                        <div className="window-header">
-                          <div className="window-controls">
-                            <div className="window-dot window-dot-red"></div>
-                            <div className="window-dot window-dot-yellow"></div>
-                            <div className="window-dot window-dot-green"></div>
+                      {/* Right Side - Project Preview Window */}
+                      <div className="lg:col-span-7 order-first lg:order-last">
+                        <div className="code-window">
+                          {/* macOS Window Controls */}
+                          <div className="window-header">
+                            <div className="window-controls">
+                              <div className="window-dot window-dot-red"></div>
+                              <div className="window-dot window-dot-yellow"></div>
+                              <div className="window-dot window-dot-green"></div>
+                            </div>
+                            <div className="window-title text-xs sm:text-sm">{project.title.toLowerCase()}.v01</div>
                           </div>
-                          <div className="window-title text-xs sm:text-sm">{project.title.toLowerCase()}.v01</div>
-                        </div>
 
-                        {/* Project Preview */}
-                        <div className="relative overflow-hidden bg-black/50 h-[300px] sm:h-[350px] md:h-[400px]">
-                          {project.title === 'Stashu' ? (
-                            <a
-                              href="https://github.com/ethanchac/Stashu"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-full h-full bg-white relative overflow-hidden block cursor-pointer group/preview"
-                            >
-                              <img
-                                src={stashuPreview}
-                                alt="Stashu Preview"
-                                className="w-full h-full object-contain"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent group-hover/preview:from-black/30 transition-all pointer-events-none"></div>
-                            </a>
-                          ) : project.title === 'Yapp' ? (
-                            <a
-                              href="https://yap-mu.vercel.app"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-full h-full bg-black relative overflow-hidden block cursor-pointer group/preview"
-                            >
-                              <iframe
-                                src="https://yap-mu.vercel.app"
-                                className="w-full h-full scale-[0.4] origin-top-left absolute pointer-events-none"
-                                style={{ width: '250%', height: '250%' }}
-                                title="Yapp Preview"
-                                scrolling="no"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 group-hover/preview:from-black/40 transition-all pointer-events-none"></div>
-                            </a>
-                          ) : project.title === 'MedPal' ? (
-                            <a
-                              href="https://med-pal-one.vercel.app/"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-full h-full bg-black relative overflow-hidden block cursor-pointer group/preview"
-                            >
-                              <iframe
-                                src="https://med-pal-one.vercel.app/"
-                                className="w-full h-full scale-[0.4] origin-top-left absolute pointer-events-none"
-                                style={{ width: '250%', height: '250%' }}
-                                title="MedPal Preview"
-                                scrolling="no"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 group-hover/preview:from-black/40 transition-all pointer-events-none"></div>
-                            </a>
-                          ) : project.title === 'CarMeets' ? (
-                            <a
-                              href="https://github.com/jacobamobin/carmeets"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-full h-full bg-black relative overflow-hidden block cursor-pointer group/preview"
-                            >
-                              <img
-                                src={carmeetsPreview}
-                                alt="CarMeets Preview"
-                                className="w-full h-full object-cover"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent group-hover/preview:from-black/30 transition-all pointer-events-none"></div>
-                            </a>
-                          ) : null}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
+                          {/* Project Preview */}
+                          <div className="relative overflow-hidden bg-black/50 h-[300px] sm:h-[350px] md:h-[400px]">
+                            {project.title === 'Stashu' ? (
+                              <a
+                                href="https://github.com/ethanchac/Stashu"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full h-full bg-white relative overflow-hidden block cursor-pointer group/preview"
+                              >
+                                <img
+                                  src={stashuPreview}
+                                  alt="Stashu Preview"
+                                  className="w-full h-full object-contain"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent group-hover/preview:from-black/30 transition-all pointer-events-none"></div>
+                              </a>
+                            ) : project.title === 'Yapp' ? (
+                              <a
+                                href="https://yap-mu.vercel.app"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full h-full bg-black relative overflow-hidden block cursor-pointer group/preview"
+                              >
+                                <iframe
+                                  src="https://yap-mu.vercel.app"
+                                  className="w-full h-full scale-[0.4] origin-top-left absolute pointer-events-none"
+                                  style={{ width: '250%', height: '250%' }}
+                                  title="Yapp Preview"
+                                  scrolling="no"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 group-hover/preview:from-black/40 transition-all pointer-events-none"></div>
+                              </a>
+                            ) : project.title === 'MedPal' ? (
+                              <a
+                                href="https://med-pal-one.vercel.app/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full h-full bg-black relative overflow-hidden block cursor-pointer group/preview"
+                              >
+                                <iframe
+                                  src="https://med-pal-one.vercel.app/"
+                                  className="w-full h-full scale-[0.4] origin-top-left absolute pointer-events-none"
+                                  style={{ width: '250%', height: '250%' }}
+                                  title="MedPal Preview"
+                                  scrolling="no"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 group-hover/preview:from-black/40 transition-all pointer-events-none"></div>
+                              </a>
+                            ) : project.title === 'CarMeets' ? (
+                              <a
+                                href="https://github.com/jacobamobin/carmeets"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full h-full bg-black relative overflow-hidden block cursor-pointer group/preview"
+                              >
+                                <img
+                                  src={carmeetsPreview}
+                                  alt="CarMeets Preview"
+                                  className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent group-hover/preview:from-black/30 transition-all pointer-events-none"></div>
+                              </a>
+                            ) : null}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
                   </div>
                 </div>
               </div>
