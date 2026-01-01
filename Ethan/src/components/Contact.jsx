@@ -82,7 +82,7 @@ function Contact() {
       {/* Faint dot grid background */}
       <DotBackground />
 
-      <div className="max-w-4xl w-full relative z-10">
+      <div className="w-full relative z-10">
         {!hasLoaded || isLoading ? (
           /* Loading Screen */
           <div className="space-y-6">

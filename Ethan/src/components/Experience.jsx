@@ -169,7 +169,7 @@ function Experience() {
       {/* Faint dot grid background */}
       <DotBackground />
 
-      <div className="max-w-6xl w-full relative z-10">
+      <div className="w-full relative z-10">
         {/* Header */}
         <div className={`mb-16 ${isVisible ? 'animate-slide-up-expo' : 'opacity-0'}`}>
           <p className="text-sm font-mono text-gray-500 mb-2">&gt; git log --experience</p>

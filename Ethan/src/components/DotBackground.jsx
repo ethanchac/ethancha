@@ -13,8 +13,8 @@ function DotBackground() {
     let dots = [];
 
     // Configuration
-    const spacing = 40; // Spacing between dots
-    const baseRadius = 1;
+    const spacing = 50; // Spacing between dots (Matches Hero original)
+    const baseRadius = 2; // Matches w-1 h-1 (4px diameter)
     const hoverRadius = 50; // Radius of influence for cursor
     const scaleFactor = 2.5; // How much dots grow when hovered
 
@@ -22,20 +22,29 @@ function DotBackground() {
     const resize = () => {
       const parent = canvas.parentElement;
       if (parent) {
-        // Set canvas size to parent size to cover full scrollable area
-        // We use offsetWidth/Height to get the full dimension
-        canvas.width = parent.offsetWidth;
-        canvas.height = parent.offsetHeight;
+        const dpr = window.devicePixelRatio || 1;
+        const rect = parent.getBoundingClientRect();
+
+        // Set actual size in memory (scaled to account for extra pixel density)
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+
+        // Normalize coordinate system to use css pixels
+        ctx.scale(dpr, dpr);
+
+        // Set visible size
+        canvas.style.width = `${rect.width}px`;
+        canvas.style.height = `${rect.height}px`;
 
         // Re-initialize dots
-        initDots();
+        initDots(rect.width, rect.height);
       }
     };
 
-    const initDots = () => {
+    const initDots = (width, height) => {
       dots = [];
-      const cols = Math.ceil(canvas.width / spacing);
-      const rows = Math.ceil(canvas.height / spacing);
+      const cols = Math.ceil(width / spacing);
+      const rows = Math.ceil(height / spacing);
 
       for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
@@ -50,8 +59,9 @@ function DotBackground() {
     };
 
     const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)'; // Base dot color
+      // Clear using the scaled dimensions
+      const dpr = window.devicePixelRatio || 1;
+      ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
 
       dots.forEach(dot => {
         // Calculate distance to mouse
@@ -102,12 +112,6 @@ function DotBackground() {
     if (canvas.parentElement) {
       observer.observe(canvas.parentElement);
     }
-
-    // Attach event listeners to window to track mouse globally or canvas locally
-    // If background is behind content, events might be blocked by content.
-    // So we attach to window or parent and map to canvas coords? 
-    // Actually canvas typically has pointer-events: none; so we need to track on window
-    // and convert to canvas coords.
 
     const trackMouseGlobal = (e) => {
       const rect = canvas.getBoundingClientRect();
