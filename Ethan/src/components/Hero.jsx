@@ -3,6 +3,118 @@ import { Linkedin } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import CodeWindow from './CodeWindow';
 
+// Hover canvas component for interactive dot effect
+function HoverCanvas() {
+  const canvasRef = useRef(null);
+  const mouseRef = useRef({ x: -1000, y: -1000 });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let animationFrameId;
+    let dots = [];
+
+    // Configuration
+    const spacing = 50;
+    const baseRadius = 2;
+    const hoverRadius = 200; // Large radius for explosive effect
+    const scaleFactor = 4; // Dramatic scaling
+
+    const resize = () => {
+      const parent = canvas.parentElement;
+      if (parent) {
+        const dpr = window.devicePixelRatio || 1;
+        const rect = parent.getBoundingClientRect();
+
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+
+        canvas.style.width = `${rect.width}px`;
+        canvas.style.height = `${rect.height}px`;
+
+        initDots(rect.width, rect.height);
+      }
+    };
+
+    const initDots = (width, height) => {
+      dots = [];
+      const cols = Math.ceil(width / spacing);
+      const rows = Math.ceil(height / spacing);
+
+      for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+          dots.push({
+            x: j * spacing + (spacing / 2),
+            y: i * spacing + (spacing / 2),
+          });
+        }
+      }
+    };
+
+    const draw = () => {
+      const dpr = window.devicePixelRatio || 1;
+      ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+
+      dots.forEach(dot => {
+        const dx = mouseRef.current.x - dot.x;
+        const dy = mouseRef.current.y - dot.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < hoverRadius) {
+          // Scale size based on proximity
+          const scale = 1 + (scaleFactor - 1) * (1 - distance / hoverRadius);
+          const currentRadius = baseRadius * scale;
+          const currentAlpha = 0.05 + (0.6 * (1 - distance / hoverRadius));
+
+          ctx.beginPath();
+          ctx.arc(dot.x, dot.y, currentRadius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${currentAlpha})`;
+          ctx.fill();
+        }
+      });
+
+      animationFrameId = requestAnimationFrame(draw);
+    };
+
+    const trackMouseGlobal = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    };
+
+    resize();
+    animationFrameId = requestAnimationFrame(draw);
+
+    window.addEventListener('resize', resize);
+    window.addEventListener('mousemove', trackMouseGlobal);
+
+    const observer = new ResizeObserver(resize);
+    if (canvas.parentElement) {
+      observer.observe(canvas.parentElement);
+    }
+
+    return () => {
+      window.removeEventListener('resize', resize);
+      window.removeEventListener('mousemove', trackMouseGlobal);
+      observer.disconnect();
+      cancelAnimationFrame(animationFrameId);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 pointer-events-none"
+      style={{ width: '100%', height: '100%' }}
+    />
+  );
+}
+
 function Hero() {
   const [displayIntro, setDisplayIntro] = useState('');
   const [displayName, setDisplayName] = useState('');
@@ -13,8 +125,75 @@ function Hero() {
   const [editableIntro, setEditableIntro] = useState("Hello world, I'm");
   const [editableName, setEditableName] = useState('Ethan Cha');
   const [editableTagline, setEditableTagline] = useState('I just like building things that work.');
+  const [editableTerminal, setEditableTerminal] = useState('contact_me.sh');
+  const [editableLinkedin, setEditableLinkedin] = useState('http://linkedin.com/in/ethan-cha-5692b8372');
+  const [enableHover, setEnableHover] = useState(false);
   const dotsRef = useRef(null);
   const sectionRef = useRef(null);
+  const terminalLinkRef = useRef(null);
+
+  // Save and restore cursor position helpers
+  const saveCursorPosition = (element) => {
+    const selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      const preCaretRange = range.cloneRange();
+      preCaretRange.selectNodeContents(element);
+      preCaretRange.setEnd(range.endContainer, range.endOffset);
+      return preCaretRange.toString().length;
+    }
+    return 0;
+  };
+
+  const restoreCursorPosition = (element, position) => {
+    const selection = window.getSelection();
+    const range = document.createRange();
+
+    let charCount = 0;
+    let nodeStack = [element];
+    let node, foundStart = false;
+
+    while (!foundStart && (node = nodeStack.pop())) {
+      if (node.nodeType === 3) { // Text node
+        const nextCharCount = charCount + node.length;
+        if (position <= nextCharCount) {
+          range.setStart(node, position - charCount);
+          range.setEnd(node, position - charCount);
+          foundStart = true;
+        }
+        charCount = nextCharCount;
+      } else {
+        let i = node.childNodes.length;
+        while (i--) {
+          nodeStack.push(node.childNodes[i]);
+        }
+      }
+    }
+
+    if (foundStart) {
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+  };
+
+  const handleTerminalLinkInput = (e) => {
+    const newText = e.currentTarget.textContent;
+    const cursorPos = saveCursorPosition(e.currentTarget);
+
+    setEditableTerminal(newText);
+
+    setTimeout(() => {
+      if (terminalLinkRef.current) {
+        restoreCursorPosition(terminalLinkRef.current, cursorPos);
+      }
+    }, 0);
+  };
+
+  const handleTerminalLinkKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  };
 
   const introText = "Hello world, I'm";
 
@@ -96,6 +275,8 @@ function Hero() {
           setShowCursor(false);
           setPhase('done');
           setPulseActive(true);
+          // Enable hover effect after animation is complete
+          setTimeout(() => setEnableHover(true), 1000);
         }, 500);
       }
     }
@@ -158,6 +339,11 @@ function Hero() {
         {generateDots()}
       </div>
 
+      {/* Interactive hover canvas - only active after animation */}
+      {enableHover && (
+        <HoverCanvas />
+      )}
+
       {/* Left side - Main text */}
       <motion.div
         className="max-w-5xl relative z-10 w-full lg:w-1/2"
@@ -201,12 +387,22 @@ function Hero() {
             &gt;
           </span>
           <a
-            href="http://linkedin.com/in/ethan-cha-5692b8372"
+            href={editableLinkedin}
             target="_blank"
             rel="noopener noreferrer"
             className="terminal-link text-base md:text-lg font-mono transition-all underline decoration-dotted underline-offset-4"
           >
-            contact_me.sh
+            <span
+              ref={terminalLinkRef}
+              contentEditable={phase === 'done'}
+              suppressContentEditableWarning={true}
+              onInput={handleTerminalLinkInput}
+              onKeyDown={handleTerminalLinkKeyDown}
+              spellCheck={false}
+              style={{ outline: 'none' }}
+            >
+              {editableTerminal}
+            </span>
           </a>
         </div>
       </motion.div>
@@ -224,9 +420,13 @@ function Hero() {
           editableIntro={editableIntro}
           editableName={editableName}
           editableTagline={editableTagline}
+          editableTerminal={editableTerminal}
+          editableLinkedin={editableLinkedin}
           onIntroChange={setEditableIntro}
           onNameChange={setEditableName}
           onTaglineChange={setEditableTagline}
+          onTerminalChange={setEditableTerminal}
+          onLinkedinChange={setEditableLinkedin}
         />
       </motion.div>
     </section>

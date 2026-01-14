@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { Github, ExternalLink, Cloud } from 'lucide-react';
-import { SiReact, SiFlask, SiMongodb, SiSocketdotio, SiTailwindcss, SiSupabase, SiThreedotjs, SiGooglegemini, SiNodedotjs, SiExpress, SiFirebase, SiSwift, SiPostgresql } from 'react-icons/si';
+import { SiReact, SiFlask, SiMongodb, SiSocketdotio, SiTailwindcss, SiSupabase, SiThreedotjs, SiGooglegemini, SiNodedotjs, SiExpress, SiFirebase, SiSwift, SiPostgresql, SiSpring } from 'react-icons/si';
+import { Coffee } from 'lucide-react';
 import { Database, Map, Mail, Server, Mic } from 'lucide-react';
 import DotBackground from './DotBackground';
 import stashuPreview from '../assets/content.png';
@@ -89,6 +90,8 @@ function Projects() {
       'Swift': <SiSwift className="w-4 h-4" />,
       'SwiftUI': <SiSwift className="w-4 h-4" />,
       'PostgreSQL': <SiPostgresql className="w-4 h-4" />,
+      'Java': <Coffee className="w-4 h-4" />,
+      'Spring Boot': <SiSpring className="w-4 h-4" />,
     };
     return iconMap[tech] || null;
   };
@@ -146,16 +149,16 @@ function Projects() {
       tagline: "Personal messaging system to yourself.",
       metadata: {
         status: "In Development",
-        engine: "Node.js + React",
+        engine: "Java + React",
         impact: "No more emailing yourself"
       },
       features: [
         "Architected full-stack personal organization app with Discord-style channel system, enabling users to store notes, links, files, and images with real-time synchronization across web and mobile platforms",
-        "Built secure RESTful API with Express and Firebase, implementing JWT authentication, rate limiting (100 req/15min), and Firestore real-time listeners for instant cross-device updates without polling",
+        "Built secure RESTful API with Spring Boot and Firebase, implementing JWT authentication, rate limiting (100 req/15min), and Firestore real-time listeners for instant cross-device updates without polling",
         "Implemented scalable file upload system using AWS S3 presigned URLs with direct client-to-S3 transfers, bypassing backend for large files while maintaining security through validation and user-isolated storage paths"
       ],
-      mainTech: ["React", "React Native", "Node.js", "Express", "Firebase", "AWS S3"],
-      technologies: ["React", "React Native", "Node.js", "Express", "Firebase", "AWS S3", "Tailwind CSS"],
+      mainTech: ["React", "React Native", "Java", "Spring Boot", "Firebase", "AWS S3"],
+      technologies: ["React", "React Native", "Java", "Spring Boot", "Firebase", "AWS S3", "Tailwind CSS"],
       github: "https://github.com/ethanchac/Stashu",
       live: null,
       status: "in-development"

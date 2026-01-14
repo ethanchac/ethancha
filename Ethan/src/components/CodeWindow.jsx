@@ -1,11 +1,13 @@
 import { useEffect, useState, useRef } from 'react';
 
-function CodeWindow({ phase, displayIntro, displayName, isTyping, editableIntro, editableName, editableTagline, onIntroChange, onNameChange, onTaglineChange }) {
+function CodeWindow({ phase, displayIntro, displayName, isTyping, editableIntro, editableName, editableTagline, editableTerminal, editableLinkedin, onIntroChange, onNameChange, onTaglineChange, onTerminalChange, onLinkedinChange }) {
   const [showCodeCursor, setShowCodeCursor] = useState(true);
   const [isComplete, setIsComplete] = useState(false);
   const introRef = useRef(null);
   const nameRef = useRef(null);
   const taglineRef = useRef(null);
+  const terminalRef = useRef(null);
+  const linkedinRef = useRef(null);
 
   // Check for completion - only set initial value once
   useEffect(() => {
@@ -116,6 +118,44 @@ function CodeWindow({ phase, displayIntro, displayName, isTyping, editableIntro,
 
   const handleTaglineKeyDown = (e) => {
     // Prevent line breaks
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  };
+
+  const handleTerminalInput = (e) => {
+    const newText = e.currentTarget.textContent;
+    const cursorPos = saveCursorPosition(e.currentTarget);
+
+    onTerminalChange(newText);
+
+    setTimeout(() => {
+      if (terminalRef.current) {
+        restoreCursorPosition(terminalRef.current, cursorPos);
+      }
+    }, 0);
+  };
+
+  const handleTerminalKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  };
+
+  const handleLinkedinInput = (e) => {
+    const newText = e.currentTarget.textContent;
+    const cursorPos = saveCursorPosition(e.currentTarget);
+
+    onLinkedinChange(newText);
+
+    setTimeout(() => {
+      if (linkedinRef.current) {
+        restoreCursorPosition(linkedinRef.current, cursorPos);
+      }
+    }, 0);
+  };
+
+  const handleLinkedinKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
     }
@@ -265,7 +305,20 @@ function CodeWindow({ phase, displayIntro, displayName, isTyping, editableIntro,
               {' '}
               <span className="token-attr">href</span>
               <span className="token-punctuation">=</span>
-              <span className="token-string">"http://linkedin.com/in/ethan-cha-5692b8372"</span>
+              <span className="token-string">"</span>
+              <span
+                ref={linkedinRef}
+                className={`token-string ${isComplete ? 'editable-inline' : ''}`}
+                contentEditable={isComplete}
+                suppressContentEditableWarning={true}
+                onInput={handleLinkedinInput}
+                onKeyDown={handleLinkedinKeyDown}
+                spellCheck={false}
+                style={{ display: 'inline' }}
+              >
+                {editableLinkedin}
+              </span>
+              <span className="token-string">"</span>
               <span className="token-tag">&gt;</span>
             </code>
           </div>
@@ -275,7 +328,17 @@ function CodeWindow({ phase, displayIntro, displayName, isTyping, editableIntro,
             <span className="line-number">7</span>
             <code className="code-text">
               <span className="token-indent">      </span>
-              <span className="token-string">contact_me.sh</span>
+              <span
+                ref={terminalRef}
+                className={`token-string ${isComplete ? 'editable-inline' : ''}`}
+                contentEditable={isComplete}
+                suppressContentEditableWarning={true}
+                onInput={handleTerminalInput}
+                onKeyDown={handleTerminalKeyDown}
+                spellCheck={false}
+              >
+                {editableTerminal}
+              </span>
             </code>
           </div>
 

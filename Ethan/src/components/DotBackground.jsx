@@ -1,8 +1,9 @@
 import { useRef, useEffect } from 'react';
 
-function DotBackground() {
+function DotBackground({ enableHover = false, pulseActive = false }) {
   const canvasRef = useRef(null);
   const mouseRef = useRef({ x: -1000, y: -1000 });
+  const pulseStartTimeRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -15,8 +16,8 @@ function DotBackground() {
     // Configuration
     const spacing = 50; // Spacing between dots (Matches Hero original)
     const baseRadius = 2; // Matches w-1 h-1 (4px diameter)
-    const hoverRadius = 50; // Radius of influence for cursor
-    const scaleFactor = 2.5; // How much dots grow when hovered
+    const hoverRadius = 200; // Radius of influence for cursor - increased for more explosive effect
+    const scaleFactor = 4; // How much dots grow when hovered - increased for more impact
 
     // Resize handler
     const resize = () => {
@@ -46,22 +47,42 @@ function DotBackground() {
       const cols = Math.ceil(width / spacing);
       const rows = Math.ceil(height / spacing);
 
+      // Calculate center for pulse effect
+      const centerX = width / 2;
+      const centerY = height / 2;
+
       for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
+          const x = j * spacing + (spacing / 2);
+          const y = i * spacing + (spacing / 2);
+
+          // Calculate distance from center for pulse animation
+          const distanceFromCenter = Math.sqrt(
+            Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2)
+          );
+
           dots.push({
-            x: j * spacing + (spacing / 2),
-            y: i * spacing + (spacing / 2),
-            baseX: j * spacing + (spacing / 2),
-            baseY: i * spacing + (spacing / 2),
+            x,
+            y,
+            baseX: x,
+            baseY: y,
+            distanceFromCenter,
           });
         }
       }
     };
 
-    const draw = () => {
+    const draw = (timestamp) => {
       // Clear using the scaled dimensions
       const dpr = window.devicePixelRatio || 1;
       ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+
+      // Track pulse animation start time
+      if (pulseActive && !pulseStartTimeRef.current) {
+        pulseStartTimeRef.current = timestamp;
+      } else if (!pulseActive) {
+        pulseStartTimeRef.current = null;
+      }
 
       dots.forEach(dot => {
         // Calculate distance to mouse
@@ -72,12 +93,39 @@ function DotBackground() {
         let currentRadius = baseRadius;
         let currentAlpha = 0.05;
 
-        // Interactive effect
-        if (distance < hoverRadius) {
+        // Pulse animation effect
+        if (pulseActive && pulseStartTimeRef.current) {
+          const elapsedTime = timestamp - pulseStartTimeRef.current;
+          const pulseDelay = dot.distanceFromCenter; // in milliseconds
+
+          if (elapsedTime >= pulseDelay) {
+            const timeSincePulse = elapsedTime - pulseDelay;
+            const pulseDuration = 600; // 0.6s to match CSS animation
+
+            if (timeSincePulse < pulseDuration) {
+              // Animate from 0.05 to 0.2 and back
+              const progress = timeSincePulse / pulseDuration;
+              // Use ease-in-out function
+              const eased = progress < 0.5
+                ? 2 * progress * progress
+                : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+              const peakAlpha = 0.2;
+              currentAlpha = progress < 0.5
+                ? 0.05 + (peakAlpha - 0.05) * (eased * 2) // Rise to peak
+                : peakAlpha - (peakAlpha - 0.05) * ((eased - 0.5) * 2); // Fall back
+            }
+          }
+        }
+
+        // Interactive hover effect - only if enableHover is true
+        // This can override the pulse effect for a more dynamic experience
+        if (enableHover && distance < hoverRadius) {
           // Scale size based on proximity
           const scale = 1 + (scaleFactor - 1) * (1 - distance / hoverRadius);
           currentRadius = baseRadius * scale;
-          currentAlpha = 0.05 + (0.3 * (1 - distance / hoverRadius)); // Brighten up to 0.35
+          const hoverAlpha = 0.05 + (0.6 * (1 - distance / hoverRadius)); // Brighten up to 0.65 for more explosive effect
+          currentAlpha = Math.max(currentAlpha, hoverAlpha); // Use the brighter value
         }
 
         ctx.beginPath();
@@ -89,22 +137,9 @@ function DotBackground() {
       animationFrameId = requestAnimationFrame(draw);
     };
 
-    // Track mouse position relative to canvas
-    const handleMouseMove = (e) => {
-      const rect = canvas.getBoundingClientRect();
-      mouseRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
-      };
-    };
-
-    const handleMouseLeave = () => {
-      mouseRef.current = { x: -1000, y: -1000 };
-    };
-
     // Initial setup
     resize();
-    draw();
+    animationFrameId = requestAnimationFrame(draw);
 
     window.addEventListener('resize', resize);
     // Use ResizeObserver for parent size changes (important for scrollable content growth)
@@ -129,7 +164,7 @@ function DotBackground() {
       observer.disconnect();
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [enableHover, pulseActive]);
 
   return (
     <canvas
