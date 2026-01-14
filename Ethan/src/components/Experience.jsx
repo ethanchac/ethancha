@@ -167,7 +167,7 @@ function Experience() {
       style={{ backgroundColor: 'rgb(28, 28, 28)' }}
     >
       {/* Faint dot grid background */}
-      <DotBackground />
+      <DotBackground enableHover={true} />
 
       <div className="w-full relative z-10">
         {/* Header */}

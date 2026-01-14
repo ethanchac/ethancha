@@ -270,7 +270,7 @@ function Projects() {
       style={{ backgroundColor: 'rgb(28, 28, 28)' }}
     >
       {/* Faint dot grid background */}
-      <DotBackground />
+      <DotBackground enableHover={true} />
 
       <div className="max-w-[1400px] w-full relative z-10">
         {/* Header */}

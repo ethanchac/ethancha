@@ -80,7 +80,7 @@ function Contact() {
       style={{ opacity, scale, y, backgroundColor: 'rgb(28, 28, 28)' }}
     >
       {/* Faint dot grid background */}
-      <DotBackground />
+      <DotBackground enableHover={true} />
 
       <div className="w-full relative z-10">
         {!hasLoaded || isLoading ? (

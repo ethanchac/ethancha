@@ -19,8 +19,8 @@ function HoverCanvas() {
     // Configuration
     const spacing = 50;
     const baseRadius = 2;
-    const hoverRadius = 200; // Large radius for explosive effect
-    const scaleFactor = 4; // Dramatic scaling
+    const hoverRadius = 100; // Smaller radius for subtle effect
+    const scaleFactor = 2.5; // Reduced scaling for subtlety
 
     const resize = () => {
       const parent = canvas.parentElement;
@@ -67,7 +67,7 @@ function HoverCanvas() {
           // Scale size based on proximity
           const scale = 1 + (scaleFactor - 1) * (1 - distance / hoverRadius);
           const currentRadius = baseRadius * scale;
-          const currentAlpha = 0.05 + (0.6 * (1 - distance / hoverRadius));
+          const currentAlpha = 0.05 + (0.15 * (1 - distance / hoverRadius)); // Lighter hover - up to 0.2
 
           ctx.beginPath();
           ctx.arc(dot.x, dot.y, currentRadius, 0, Math.PI * 2);

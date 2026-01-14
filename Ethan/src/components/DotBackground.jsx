@@ -16,8 +16,8 @@ function DotBackground({ enableHover = false, pulseActive = false }) {
     // Configuration
     const spacing = 50; // Spacing between dots (Matches Hero original)
     const baseRadius = 2; // Matches w-1 h-1 (4px diameter)
-    const hoverRadius = 200; // Radius of influence for cursor - increased for more explosive effect
-    const scaleFactor = 4; // How much dots grow when hovered - increased for more impact
+    const hoverRadius = 100; // Radius of influence for cursor - smaller area for subtle effect
+    const scaleFactor = 2.5; // How much dots grow when hovered - reduced for subtlety
 
     // Resize handler
     const resize = () => {
@@ -124,7 +124,7 @@ function DotBackground({ enableHover = false, pulseActive = false }) {
           // Scale size based on proximity
           const scale = 1 + (scaleFactor - 1) * (1 - distance / hoverRadius);
           currentRadius = baseRadius * scale;
-          const hoverAlpha = 0.05 + (0.6 * (1 - distance / hoverRadius)); // Brighten up to 0.65 for more explosive effect
+          const hoverAlpha = 0.05 + (0.15 * (1 - distance / hoverRadius)); // Lighter hover - brighten up to 0.2
           currentAlpha = Math.max(currentAlpha, hoverAlpha); // Use the brighter value
         }
 

@@ -124,7 +124,7 @@ function AboutMe() {
       style={{ backgroundColor: 'rgb(28, 28, 28)' }}
     >
       {/* Faint dot grid background */}
-      <DotBackground />
+      <DotBackground enableHover={true} />
 
       <motion.div
         className="w-full grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 relative z-10 lg:items-end"
