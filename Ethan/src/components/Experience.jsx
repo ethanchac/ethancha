@@ -61,6 +61,42 @@ function Experience() {
 
   const experiences = [
     {
+      company: "Acto",
+      location: "Toronto, ON",
+      position: "AI Engineer Intern",
+      period: "[April 2026 — Present]",
+      date: "[Apr 2026]",
+      highlights: [
+        "Built and deployed LLM-powered AI agents that let Biogen's medical field teams query enterprise data in plain English, configuring agent skills and Snowflake-backed retrieval, then templatizing the setup to scale agents across 4 field roles and 5+ therapeutic areas without rebuilding each one",
+        "Optimized the Snowflake queries behind the agents' data retrieval, rewriting the 7 slowest to cut average response latency by 38% and the worst query by 76% through JOIN restructuring and query-plan tuning",
+        "Diagnosed and resolved AWS Bedrock streaming failures that were crashing the agents' LLM responses in production, tracing the root cause to a response path missing error handling and read-timeout configuration and restoring graceful recovery",
+        "Shipped an analytics dashboard giving admins visibility into AI agent performance, surfacing per-skill error rates, unanswered-query frequency, and user-flagged responses to replace manual, one-at-a-time review of feedback"
+      ]
+    },
+    {
+      company: "Applied Optimal Inc",
+      location: "Toronto, ON",
+      position: "Software Engineering Intern (Part-time)",
+      period: "[March 2026 — May 2026]",
+      date: "[Mar 2026]",
+      highlights: [
+        "Closed a security flaw that let users grant themselves higher access levels, moving permission checks to the server with FastAPI and Supabase to protect every logged-in session",
+        "Simplified the permission system by merging 2 overlapping user roles into one tiered structure and updating the PostgreSQL database, login logic, and tests to match, cutting complexity by 50%",
+        "Set up the team's development environment with Docker and began shipping full-stack features across a Flutter + FastAPI codebase within the first week"
+      ]
+    },
+    {
+      company: "Yapp",
+      location: "Toronto, ON",
+      position: "Co-Founder & Lead Engineer",
+      period: "[June 2025 — Present]",
+      date: "[Jun 2025]",
+      highlights: [
+        "Built and launched a full-stack social app with a React frontend, now used by 100+ people daily, growing from the sole developer into the lead of a 15+ person team",
+        "Designed the entire backend in Flask and MongoDB, building 180+ API endpoints across 16 modules to power the app's features"
+      ]
+    },
+    {
       company: "TMU BYTE",
       location: "Toronto, ON",
       position: "Frontend Engineer",
