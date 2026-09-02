@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { Github, ExternalLink, Cloud } from 'lucide-react';
-import { SiReact, SiFlask, SiMongodb, SiSocketdotio, SiTailwindcss, SiSupabase, SiThreedotjs, SiGooglegemini, SiNodedotjs, SiExpress, SiFirebase, SiSwift, SiPostgresql, SiSpring } from 'react-icons/si';
+import { SiReact, SiFlask, SiMongodb, SiSocketdotio, SiTailwindcss, SiSupabase, SiThreedotjs, SiGooglegemini, SiNodedotjs, SiExpress, SiFirebase, SiSwift, SiPostgresql, SiSpring, SiPytorch } from 'react-icons/si';
 import { Coffee } from 'lucide-react';
 import { Database, Map, Mail, Server, Mic } from 'lucide-react';
 import DotBackground from './DotBackground';
@@ -92,6 +92,7 @@ function Projects() {
       'PostgreSQL': <SiPostgresql className="w-4 h-4" />,
       'Java': <Coffee className="w-4 h-4" />,
       'Spring Boot': <SiSpring className="w-4 h-4" />,
+      'PyTorch': <SiPytorch className="w-4 h-4" />,
     };
     return iconMap[tech] || null;
   };
@@ -117,6 +118,28 @@ function Projects() {
       technologies: ["React", "React Native", "Flask", "MongoDB", "Socket.IO", "AWS S3", "Leaflet", "Sendgrid API", "Railway", "TailwindCSS"],
       github: "https://github.com/ethanchac/Yap",
       live: "https://yap-mu.vercel.app",
+      status: "deployed"
+    },
+    {
+      title: "Pocket GPT",
+      version: "v1.0",
+      date: "2025",
+      shortDate: "2025",
+      tagline: "Train a GPT from scratch in your browser. Watch it learn in real-time.",
+      metadata: {
+        status: "Production / Live",
+        engine: "Flask + React + PyTorch",
+        impact: "Real-time training visualization"
+      },
+      features: [
+        "Built interactive browser-based platform for training character-level GPT models from scratch, featuring real-time loss curves, attention heatmaps, and token probability visualizations via WebSocket streaming",
+        "Implemented custom micro-GPT architecture in PyTorch with configurable hyperparameters, supporting multiple training datasets and live text generation during training",
+        "Engineered real-time training pipeline with Flask-SocketIO and eventlet, enabling pause/resume/step controls, speed adjustment, and live model checkpoint saving and loading"
+      ],
+      mainTech: ["React", "Flask", "PyTorch", "Socket.IO", "TailwindCSS", "Railway"],
+      technologies: ["React", "Flask", "PyTorch", "Socket.IO", "TailwindCSS", "Railway", "Vercel", "Three.js"],
+      github: "https://github.com/ethanchac/Pocket-GPT",
+      live: "https://pocket-gpt-henna.vercel.app",
       status: "deployed"
     },
     {
@@ -426,7 +449,23 @@ function Projects() {
 
                           {/* Project Preview */}
                           <div className="relative overflow-hidden bg-black/50 h-[300px] sm:h-[350px] md:h-[400px]">
-                            {project.title === 'Stashu' ? (
+                            {project.title === 'Pocket GPT' ? (
+                              <a
+                                href="https://pocket-gpt-henna.vercel.app"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full h-full bg-black relative overflow-hidden block cursor-pointer group/preview"
+                              >
+                                <iframe
+                                  src="https://pocket-gpt-henna.vercel.app"
+                                  className="w-full h-full scale-[0.4] origin-top-left absolute pointer-events-none"
+                                  style={{ width: '250%', height: '250%' }}
+                                  title="Pocket GPT Preview"
+                                  scrolling="no"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 group-hover/preview:from-black/40 transition-all pointer-events-none"></div>
+                              </a>
+                            ) : project.title === 'Stashu' ? (
                               <a
                                 href="https://github.com/ethanchac/Stashu"
                                 target="_blank"
