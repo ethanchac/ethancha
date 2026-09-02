@@ -117,7 +117,7 @@ function Projects() {
       mainTech: ["React", "React Native", "Flask", "MongoDB", "Socket.IO", "AWS S3"],
       technologies: ["React", "React Native", "Flask", "MongoDB", "Socket.IO", "AWS S3", "Leaflet", "Sendgrid API", "Railway", "TailwindCSS"],
       github: "https://github.com/ethanchac/Yap",
-      live: "https://yap-mu.vercel.app",
+      live: "https://yapp-mu.com",
       status: "deployed"
     },
     {
@@ -481,13 +481,13 @@ function Projects() {
                               </a>
                             ) : project.title === 'Yapp' ? (
                               <a
-                                href="https://yap-mu.vercel.app"
+                                href="https://yapp-mu.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="w-full h-full bg-black relative overflow-hidden block cursor-pointer group/preview"
                               >
                                 <iframe
-                                  src="https://yap-mu.vercel.app"
+                                  src="https://yapp-mu.com"
                                   className="w-full h-full scale-[0.4] origin-top-left absolute pointer-events-none"
                                   style={{ width: '250%', height: '250%' }}
                                   title="Yapp Preview"
